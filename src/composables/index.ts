@@ -8,5 +8,5 @@
 // Theme composable
 export { useTheme } from './useTheme'
 
-// Re-export tanstack composables if they exist
-export * from './tanstack'
+// Re-export tanstack composables if they exist - COMMENTED UNTIL WE FIX THEM
+// export * from './tanstack'

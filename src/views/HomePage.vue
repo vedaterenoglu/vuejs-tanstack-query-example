@@ -9,17 +9,11 @@
  */
 -->
 <template>
-  <div class="home-page">
-    <h1>Welcome to Events App</h1>
-    <p>Select a city to browse events</p>
-    <!-- City selection grid will be added here -->
-
-    <div style="margin-top: 2rem">
-      <button type="button" @click="toggleTheme">
-        Toggle Theme (Current: {{ theme }})
-      </button>
+  <Layout>
+    <div class="home-page">
+      <!-- Empty body - will be filled according to TODO list -->
     </div>
-  </div>
+  </Layout>
 </template>
 
 <script setup lang="ts">
@@ -28,16 +22,13 @@
  * Template-level component that will compose city grid organism
  */
 
-import { useTheme } from '@/composables/useTheme'
-
-const { theme, toggleTheme } = useTheme()
+import Layout from '@/components/layout/Layout.vue'
 
 // Component logic will be added in later iterations
 </script>
 
 <style scoped>
 .home-page {
-  padding: 2rem;
-  text-align: center;
+  min-height: calc(100vh - 64px - 64px); /* Minus navbar and footer heights */
 }
 </style>

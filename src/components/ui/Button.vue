@@ -36,10 +36,10 @@ import { cn } from '@/lib/utils'
 
 import { buttonVariants } from './button-variants'
 
-import type { VariantProps } from 'class-variance-authority'
-
 // Props interface
-interface ButtonProps extends VariantProps<typeof buttonVariants> {
+interface ButtonProps {
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
+  size?: 'default' | 'sm' | 'lg' | 'icon'
   asChild?: boolean
 }
 
