@@ -1,101 +1,110 @@
 /**
  * @file useTheme.ts
- * @role Theme management composable for dark/light mode
- * @patterns Composable Pattern, Observer Pattern, State Management Pattern
- * @solid SRP (Theme management only), OCP (Extensible for new themes)
- * @ssot CSS variables for theme state
+ * @role Singleton theme management composable with cross-tab sync
+ * @patterns Singleton Pattern, Observer Pattern
+ * @solid SRP (Theme management only)
+ * @ssot The `isDarkMode` ref is the single source of truth post-initialization.
  */
 
-import { ref, computed, watchEffect, type Ref } from 'vue'
+import { ref, computed, readonly, watchEffect, type Ref } from 'vue'
 
-type Theme = 'light' | 'dark' | 'system'
-type ResolvedTheme = 'light' | 'dark'
+// Theme type
+type Theme = 'light' | 'dark'
 
-interface ThemeComposable {
-  theme: Ref<Theme>
-  resolvedTheme: Ref<ResolvedTheme>
-  setTheme: (newTheme: Theme) => void
-  toggleTheme: () => void
-}
+// Singleton state - shared across the entire app
+const isDarkMode = ref<boolean>(false)
+const isInitialized = ref<boolean>(false)
 
-// Singleton state for theme management (SSOT)
-const theme = ref<Theme>('system')
-const resolvedTheme = ref<ResolvedTheme>('light')
+// localStorage key
+const STORAGE_KEY = 'theme-preference'
 
 /**
- * useTheme - Theme management composable
- * 
- * Provides reactive theme state and utilities for managing
- * application theme (light/dark mode). Follows SSOT principle
- * with CSS variables as the single source of truth for theme state.
- * 
- * Design Patterns Applied:
- * - Composable Pattern: Reusable theme logic
- * - Observer Pattern: Watches system theme changes
- * - State Management Pattern: Reactive state with computed properties
+ * Updates the DOM by adding or removing the 'dark' class from the html element.
+ * This is the single function responsible for DOM manipulation.
  */
-export function useTheme(): ThemeComposable {
-  // Initialize theme from localStorage or default to system
-  if (typeof window !== 'undefined' && !theme.value) {
-    const stored = localStorage.getItem('theme') as Theme | null
-    theme.value = stored || 'system'
+function updateDOM(isDark: boolean): void {
+  if (isDark) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}
+
+/**
+ * Initializes the theme state by reading from localStorage or defaulting to dark mode.
+ * This function only sets the initial value of the `isDarkMode` ref.
+ */
+function initializeTheme(): void {
+  if (isInitialized.value) return
+
+  const storedPreference = localStorage.getItem(STORAGE_KEY)
+
+  if (storedPreference) {
+    // Validate stored preference. If it's not 'light', default to 'dark'.
+    isDarkMode.value = storedPreference !== 'light'
+  } else {
+    // If no preference is stored, default to dark mode.
+    isDarkMode.value = true
   }
 
-  // Watch for theme changes and update DOM
-  watchEffect(() => {
-    if (typeof window === 'undefined') return
+  isInitialized.value = true
+}
 
-    const root = document.documentElement
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-
-    // Resolve the actual theme based on user preference
-    const updateResolvedTheme = () => {
-      if (theme.value === 'system') {
-        resolvedTheme.value = mediaQuery.matches ? 'dark' : 'light'
-      } else {
-        resolvedTheme.value = theme.value as ResolvedTheme
-      }
-
-      // Update DOM class for CSS variables
-      root.classList.remove('light', 'dark')
-      root.classList.add(resolvedTheme.value)
-    }
-
-    updateResolvedTheme()
-
-    // Listen for system theme changes
-    const handleChange = () => {
-      if (theme.value === 'system') {
-        updateResolvedTheme()
-      }
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-
-    // Cleanup
-    return () => {
-      mediaQuery.removeEventListener('change', handleChange)
+/**
+ * Sets up cross-tab synchronization. When a change is detected in another tab,
+ * it updates the local `isDarkMode` state. The `watchEffect` handles the rest.
+ */
+function setupCrossTabSync(): void {
+  window.addEventListener('storage', (e) => {
+    if (e.key === STORAGE_KEY && e.newValue && e.newValue !== e.oldValue) {
+      isDarkMode.value = e.newValue === 'dark'
     }
   })
+}
 
-  // Set theme and persist to localStorage
-  const setTheme = (newTheme: Theme) => {
-    theme.value = newTheme
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('theme', newTheme)
-    }
+/**
+ * A singleton composable for managing the application's theme.
+ *
+ * Features:
+ * - A single `watchEffect` handles all DOM and localStorage updates, acting as the single point of synchronization.
+ * - Initialization is separated from reactive effects to prevent race conditions.
+ * - Cross-tab synchronization updates the reactive state, letting the `watchEffect` handle the side effects.
+ */
+export function useTheme() {
+  // This block runs only once for the lifetime of the app.
+  if (!isInitialized.value) {
+    // 1. Set the initial state of `isDarkMode`
+    initializeTheme()
+    // 2. Listen for changes from other tabs
+    setupCrossTabSync()
+
+    // 3. This single effect reacts to ANY change in `isDarkMode`
+    watchEffect(() => {
+      const newTheme = isDarkMode.value ? 'dark' : 'light'
+      // Update the DOM
+      updateDOM(isDarkMode.value)
+      // Update localStorage to persist the change
+      localStorage.setItem(STORAGE_KEY, newTheme)
+    })
   }
 
-  // Toggle between light and dark themes
-  const toggleTheme = () => {
-    const newTheme = resolvedTheme.value === 'light' ? 'dark' : 'light'
-    setTheme(newTheme)
+  // Function to toggle the theme
+  const toggleTheme = (): void => {
+    isDarkMode.value = !isDarkMode.value
   }
+
+  // Function to set a specific theme
+  const setTheme = (theme: Theme): void => {
+    isDarkMode.value = theme === 'dark'
+  }
+
+  // Computed property for the current theme string ('light' or 'dark')
+  const theme = computed(() => (isDarkMode.value ? 'dark' : 'light'))
 
   return {
-    theme: computed(() => theme.value),
-    resolvedTheme: computed(() => resolvedTheme.value),
-    setTheme,
+    isDark: readonly(isDarkMode) as Ref<boolean>,
+    theme: readonly(theme),
     toggleTheme,
+    setTheme,
   }
 }

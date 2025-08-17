@@ -163,7 +163,8 @@
 
   /* Responsive Image Container */
   .image-responsive {
-    @apply relative w-full overflow-hidden bg-muted;
+    @apply relative w-full overflow-hidden;
+    background-color: var(--muted);
     aspect-ratio: 16 / 9;
   }
 
@@ -173,13 +174,15 @@
 
   /* Mobile-Optimized Loading States */
   .skeleton-mobile {
-    @apply animate-pulse bg-muted rounded;
+    @apply animate-pulse rounded;
+    background-color: var(--muted);
     min-height: var(--min-touch-target);
   }
 
   /* Responsive Navigation */
   .nav-mobile {
-    @apply fixed bottom-0 left-0 right-0 bg-background border-t z-50;
+    @apply fixed bottom-0 left-0 right-0 border-t z-50;
+    background-color: var(--background);
     padding-bottom: calc(1rem + var(--safe-area-inset));
   }
 
@@ -221,7 +224,8 @@
 
   /* Responsive Focus States */
   .focus-visible-mobile {
-    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    --tw-ring-color: var(--primary);
   }
 
   /* Landscape Mode Adjustments */

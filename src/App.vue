@@ -12,9 +12,7 @@
   <QueryProvider>
     <ClerkProvider>
       <div id="app">
-        <!-- Router view will be added here in routing iteration -->
-        <h1>Vue.js TanStack Query Events App</h1>
-        <p>Application is ready for development</p>
+        <RouterView />
       </div>
     </ClerkProvider>
   </QueryProvider>
@@ -34,33 +32,23 @@
  * - Template Pattern: Defines application structure
  */
 
-import { onMounted } from 'vue'
+import { RouterView } from 'vue-router'
 
 import ClerkProvider from '@/components/providers/ClerkProvider.vue'
 import QueryProvider from '@/components/providers/QueryProvider.vue'
 import { useTheme } from '@/composables/useTheme'
 
-// Initialize theme on app mount
+// Initialize theme singleton
+// The composable handles everything internally:
+// - Checks localStorage
+// - Falls back to system preference
+// - Sets up cross-tab sync
+// - Manages DOM updates
 useTheme()
-
-onMounted(() => {
-  // Theme is automatically initialized by the composable
-  // This ensures the correct theme class is applied to the document
-})
 </script>
 
-<style>
-/* Import global styles */
-@import '@/styles/globals.css';
-@import '@/styles/animations.css';
-@import '@/styles/responsive.css';
-
+<style scoped>
 #app {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: system-ui, -apple-system, sans-serif;
 }
 </style>
