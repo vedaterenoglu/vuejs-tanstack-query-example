@@ -15,11 +15,11 @@
 <script setup lang="ts">
 /**
  * QueryProvider - TanStack Query provider wrapper
- * 
+ *
  * Provides TanStack Query client configuration to the entire application.
  * Note: In Vue, the actual VueQuery plugin setup happens in main.ts
  * This component serves as a placeholder for consistency with React architecture
- * 
+ *
  * Design Patterns Applied:
  * - Provider Pattern: Provides query client context to component tree
  * - Configuration Pattern: Uses centralized query client configuration

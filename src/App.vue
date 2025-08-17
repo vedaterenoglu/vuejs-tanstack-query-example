@@ -21,11 +21,11 @@
 <script setup lang="ts">
 /**
  * App - Root application component
- * 
+ *
  * Sets up the application with all necessary providers following
  * the provider pattern. Each provider manages its own domain of
  * responsibility (Query for server state, Clerk for auth, Theme for UI).
- * 
+ *
  * Design Patterns Applied:
  * - Provider Pattern: Wraps app with necessary providers
  * - Composition Pattern: Composes providers hierarchically

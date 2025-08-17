@@ -55,7 +55,7 @@ function initializeTheme(): void {
  * it updates the local `isDarkMode` state. The `watchEffect` handles the rest.
  */
 function setupCrossTabSync(): void {
-  window.addEventListener('storage', (e) => {
+  window.addEventListener('storage', e => {
     if (e.key === STORAGE_KEY && e.newValue && e.newValue !== e.oldValue) {
       isDarkMode.value = e.newValue === 'dark'
     }

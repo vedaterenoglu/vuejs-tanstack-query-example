@@ -1,10 +1,10 @@
 /**
  * queryClient - TanStack Query client configuration for Vue
- * 
+ *
  * Provides configured QueryClient instance with optimized defaults, query key factory,
  * and persistence utilities. Implements consistent caching strategies and error handling
  * patterns for the entire application.
- * 
+ *
  * Design Patterns Applied:
  * - Singleton Pattern: Single QueryClient instance for the application
  * - Factory Pattern: Query key factory for consistent cache key generation

@@ -15,12 +15,12 @@
 <script setup lang="ts">
 /**
  * ClerkProvider - Clerk authentication provider wrapper
- * 
+ *
  * Provides Clerk authentication context to the entire application.
  * Note: In Vue, the actual Clerk plugin setup happens in main.ts
  * This component serves as a placeholder for consistency with React architecture
  * and future authentication-related enhancements.
- * 
+ *
  * Design Patterns Applied:
  * - Provider Pattern: Provides auth context to component tree
  * - Adapter Pattern: Adapts Clerk API to Vue application needs

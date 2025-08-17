@@ -14,8 +14,10 @@
     <p>Select a city to browse events</p>
     <!-- City selection grid will be added here -->
 
-    <div style="margin-top: 2rem;">
-      <button type="button" @click="toggleTheme">Toggle Theme (Current: {{ theme }})</button>
+    <div style="margin-top: 2rem">
+      <button type="button" @click="toggleTheme">
+        Toggle Theme (Current: {{ theme }})
+      </button>
     </div>
   </div>
 </template>

@@ -6,6 +6,5 @@
   "useTabs": false,
   "printWidth": 80,
   "arrowParens": "avoid",
-  "endOfLine": "lf",
-  "insertFinalNewline": true
+  "endOfLine": "lf"
 }
