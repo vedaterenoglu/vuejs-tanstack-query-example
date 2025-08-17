@@ -38,9 +38,21 @@ function validateEnvironment(): void {
     'VITE_CLERK_PUBLISHABLE_KEY',
   ]
 
-  const missing = required.filter(
-    key => !(import.meta.env as Record<string, string>)[key]
-  )
+  const env = import.meta.env as Record<string, string>
+  const missing = required.filter(key => {
+    switch (key) {
+      case 'VITE_STRIPE_PUBLISHABLE_KEY':
+        return !env.VITE_STRIPE_PUBLISHABLE_KEY
+      case 'VITE_API_BASE_URL':
+        return !env.VITE_API_BASE_URL
+      case 'VITE_APP_URL':
+        return !env.VITE_APP_URL
+      case 'VITE_CLERK_PUBLISHABLE_KEY':
+        return !env.VITE_CLERK_PUBLISHABLE_KEY
+      default:
+        return true
+    }
+  })
 
   if (missing.length > 0) {
     throw new Error(
@@ -50,9 +62,7 @@ function validateEnvironment(): void {
   }
 
   // Validate Stripe key format
-  const stripeKey = (import.meta.env as Record<string, string>)[
-    'VITE_STRIPE_PUBLISHABLE_KEY'
-  ]
+  const stripeKey = env.VITE_STRIPE_PUBLISHABLE_KEY
   if (!stripeKey || !stripeKey.startsWith('pk_')) {
     throw new Error(
       'Invalid Stripe publishable key format. Key must start with "pk_"'
@@ -60,9 +70,7 @@ function validateEnvironment(): void {
   }
 
   // Validate Clerk key format
-  const clerkKey = (import.meta.env as Record<string, string>)[
-    'VITE_CLERK_PUBLISHABLE_KEY'
-  ]
+  const clerkKey = env.VITE_CLERK_PUBLISHABLE_KEY
   if (!clerkKey || !clerkKey.startsWith('pk_')) {
     throw new Error(
       'Invalid Clerk publishable key format. Key must start with "pk_"'
@@ -79,12 +87,12 @@ function createEnvironmentConfig(): EnvironmentConfig {
   const envVars = import.meta.env as Record<string, string>
 
   return {
-    stripePublishableKey: envVars['VITE_STRIPE_PUBLISHABLE_KEY'] || '',
-    apiBaseUrl: envVars['VITE_API_BASE_URL'] || '',
-    appBaseUrl: envVars['VITE_APP_URL'] || '',
-    appName: envVars['VITE_APP_NAME'] || 'Event Booking App',
-    clerkPublishableKey: envVars['VITE_CLERK_PUBLISHABLE_KEY'] || '',
-    mode: (envVars['MODE'] || 'development') as
+    stripePublishableKey: envVars.VITE_STRIPE_PUBLISHABLE_KEY || '',
+    apiBaseUrl: envVars.VITE_API_BASE_URL || '',
+    appBaseUrl: envVars.VITE_APP_URL || '',
+    appName: envVars.VITE_APP_NAME || 'Event Booking App',
+    clerkPublishableKey: envVars.VITE_CLERK_PUBLISHABLE_KEY || '',
+    mode: (envVars.MODE || 'development') as
       | 'development'
       | 'production'
       | 'test',

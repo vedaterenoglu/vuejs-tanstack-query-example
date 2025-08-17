@@ -15,6 +15,8 @@ export default [
   ...vueTsEslintConfig(),
   security.configs.recommended,
   {
+    files: ['**/*.ts', '**/*.tsx', '**/*.vue'],
+    ignores: ['vite.config.ts'],
     plugins: {
       security,
       import: importPlugin,
@@ -25,6 +27,8 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
+        project: './tsconfig.app.json',
+        tsconfigRootDir: '.',
       },
     },
     rules: {

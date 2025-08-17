@@ -1,30 +1,66 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
+<!--
+/**
+ * @file App.vue
+ * @role Root application component with provider setup
+ * @atomic template
+ * @patterns Provider Pattern, Composition Pattern, Template Pattern
+ * @solid SRP (Application root only), OCP (Extensible through slots)
+ * @ssot Providers manage their respective state domains
+ */
+-->
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <QueryProvider>
+    <ClerkProvider>
+      <div id="app">
+        <!-- Router view will be added here in routing iteration -->
+        <h1>Vue.js TanStack Query Events App</h1>
+        <p>Application is ready for development</p>
+      </div>
+    </ClerkProvider>
+  </QueryProvider>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+<script setup lang="ts">
+/**
+ * App - Root application component
+ * 
+ * Sets up the application with all necessary providers following
+ * the provider pattern. Each provider manages its own domain of
+ * responsibility (Query for server state, Clerk for auth, Theme for UI).
+ * 
+ * Design Patterns Applied:
+ * - Provider Pattern: Wraps app with necessary providers
+ * - Composition Pattern: Composes providers hierarchically
+ * - Template Pattern: Defines application structure
+ */
+
+import { onMounted } from 'vue'
+
+import ClerkProvider from '@/components/providers/ClerkProvider.vue'
+import QueryProvider from '@/components/providers/QueryProvider.vue'
+import { useTheme } from '@/composables/useTheme'
+
+// Initialize theme on app mount
+useTheme()
+
+onMounted(() => {
+  // Theme is automatically initialized by the composable
+  // This ensures the correct theme class is applied to the document
+})
+</script>
+
+<style>
+/* Import global styles */
+@import '@/styles/globals.css';
+@import '@/styles/animations.css';
+@import '@/styles/responsive.css';
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 </style>
