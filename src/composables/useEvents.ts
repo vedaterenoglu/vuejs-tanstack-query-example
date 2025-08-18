@@ -67,7 +67,12 @@ async function fetchEvents(params?: {
     throw new Error(`Failed to fetch events: ${response.statusText}`)
   }
   
-  return response.json()
+  const data = await response.json()
+  console.warn('[fetchEvents] API URL:', url)
+  console.warn('[fetchEvents] API response:', data)
+  console.warn('[fetchEvents] API events count:', data.events?.length)
+  console.warn('[fetchEvents] API total count:', data.count)
+  return data
 }
 
 /**
@@ -196,7 +201,12 @@ export function useInfiniteEvents(
   
   // Computed properties for easier access
   const events = computed(() => {
-    return query.data.value?.pages.flatMap(page => page.events) || []
+    console.warn('[useInfiniteEvents] query.data.value:', query.data.value)
+    console.warn('[useInfiniteEvents] query.data.value?.pages:', query.data.value?.pages)
+    const result = query.data.value?.pages?.flatMap(page => page.events) || []
+    console.warn('[useInfiniteEvents] computed events result:', result)
+    console.warn('[useInfiniteEvents] computed events length:', result.length)
+    return result
   })
   
   const totalCount = computed(() => {

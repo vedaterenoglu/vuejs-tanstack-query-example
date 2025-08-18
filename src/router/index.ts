@@ -34,6 +34,15 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/test-hero',
+    name: 'test-hero',
+    component: () => import('@/views/TestEventHeroSection.vue'),
+    meta: {
+      title: 'Test Hero Section',
+      requiresAuth: false,
+    },
+  },
+  {
     path: '/events/:slug',
     name: 'event-detail',
     component: () => import('@/views/SingleEventPage.vue'),

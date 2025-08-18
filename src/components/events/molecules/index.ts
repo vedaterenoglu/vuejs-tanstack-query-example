@@ -1,15 +1,10 @@
 /**
  * @file index.ts
- * @role Barrel export for event molecules
+ * @role Barrel export for molecule components
  * @patterns Barrel Export Pattern
  * @solid SRP (Export management only)
- * @ssot Central export point for all event molecules
  */
 
-// Card molecules
-export { default as EventCardDetails } from './EventCardDetails.vue'
-
-// Grid molecules
-export { default as EventEmptyState } from './EventEmptyState.vue'
-export { default as EventGridHeader } from './EventGridHeader.vue'
-export { default as EventGridSkeleton } from './EventGridSkeleton.vue'
+export { default as EventCardBody } from './EventCardBody.vue'
+export { default as EventCardFooter } from './EventCardFooter.vue'
+export { default as EventCardHeader } from './EventCardHeader.vue'
