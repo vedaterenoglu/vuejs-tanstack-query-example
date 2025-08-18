@@ -44,10 +44,8 @@ interface InputProps {
   type?: string
 }
 
-// Define props with defaults
-const { type } = withDefaults(defineProps<InputProps>(), {
-  type: 'text',
-})
+// Define props with destructure default values
+const { type = 'text' } = defineProps<InputProps>()
 
 // Get attrs for filtering
 const attrs = useAttrs()

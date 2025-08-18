@@ -51,11 +51,10 @@
 /**
  * Navbar - Navigation header component
  *
- * Provides responsive navigation with authentication integration,
+ * Provides responsive navigation with Clerk authentication,
  * theme toggle functionality, and animated branding elements.
  *
  * Design Patterns:
- * - Conditional Rendering: Different UI based on auth state
  * - Composition: Combines auth, theme, and navigation
  * - Animation: CSS transitions for interactive elements
  */
@@ -74,6 +73,6 @@ interface NavbarProps {
 // Define props
 defineProps<NavbarProps>()
 
-// Get authentication state
+// Get authentication state from Clerk
 const { isSignedIn } = useUser()
 </script>

@@ -20,3 +20,12 @@ export { default as CardFooter } from './CardFooter.vue'
 
 // Input component
 export { default as Input } from './Input.vue'
+
+// ScrollAnimateWrapper component
+export { default as ScrollAnimateWrapper } from './ScrollAnimateWrapper.vue'
+
+// Re-export animation components
+export * from './animation'
+
+// Re-export button directory components if different from Button.vue
+export * from './button'

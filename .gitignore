@@ -23,7 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
-src/documets/promts
+src/documents/promts
+src/documents/project
 
 # Project documentation
 CLAUDE.md
