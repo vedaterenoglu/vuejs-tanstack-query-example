@@ -13,10 +13,14 @@ export { useCities } from './useCities'
 export { useCityCard } from './useCityCard'
 export { useCitySelection } from './useCitySelection'
 
+// Event composables
+export { useEvents, useInfiniteEvents } from './useEvents'
+
 // Utility composables
 export { useAnimation } from './useAnimation'
 export { useDebounce } from './useDebounce'
 export { useIntersectionObserver } from './useIntersectionObserver'
+export { useInfiniteScroll } from './useInfiniteScroll'
 
 // Re-export tanstack composables if they exist - COMMENTED UNTIL WE FIX THEM
 // export * from './tanstack'

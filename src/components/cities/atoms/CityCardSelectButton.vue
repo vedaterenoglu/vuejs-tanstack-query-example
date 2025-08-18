@@ -10,11 +10,13 @@
 <template>
   <div 
     v-if="showButton"
-    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 transition-all duration-300 ease-out"
-    :class="isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'"
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 transition-all duration-300 ease-out pointer-events-none"
+    :class="[
+      isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+    ]"
   >
     <Button
-      @click.stop="handleClick"
+      @click.stop.prevent="handleClick"
       :disabled="disabled || isLoading"
       variant="ghost"
       size="sm"

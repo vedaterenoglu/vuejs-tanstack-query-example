@@ -113,7 +113,9 @@ const {
   showSelectButton: props.showSelectButton,
   disabled: props.disabled,
   onSelect: props.onSelect,
-  onClick: (city) => emit('click', city)
+  onClick: (city) => {
+    emit('click', city)
+  }
 })
 
 // Wrapper to emit event

@@ -122,8 +122,8 @@ const shouldShowLoadMoreHint = computed(() => {
   return props.maxCities && props.filteredCount > props.maxCities
 })
 
-// Handle city card click
+// Handle city card click (receives city from emitted event)
 const handleCityClick = (city: City) => {
-  void router.push(`/events?city=${city.citySlug}`)
+  void router.push(`/events?search=${city.citySlug}`)
 }
 </script>

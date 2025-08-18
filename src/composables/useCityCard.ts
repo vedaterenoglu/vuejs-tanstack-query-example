@@ -104,7 +104,9 @@ export function useCityCard(options: UseCityCardOptions): UseCityCardReturn {
   }
   
   const handleClick = () => {
-    onClick?.(city)
+    if (onClick) {
+      onClick(city)
+    }
   }
   
   return {
