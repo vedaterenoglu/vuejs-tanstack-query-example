@@ -25,13 +25,13 @@
 <script setup lang="ts">
 /**
  * ClearButton - Atom component for clearing input
- * 
+ *
  * Responsibilities:
  * - Display clear button with X icon
  * - Handle click events
  * - Control visibility
  * - Provide accessibility
- * 
+ *
  * Design Patterns:
  * - Button Pattern: Standard button behavior
  */
@@ -52,9 +52,10 @@ interface ClearButtonProps {
 withDefaults(defineProps<ClearButtonProps>(), {
   visible: true,
   disabled: false,
-  buttonClass: 'absolute right-1 top-1/2 h-9 w-9 -translate-y-1/2 hover:bg-muted min-h-[36px] min-w-[36px] p-0 flex items-center justify-center',
+  buttonClass:
+    'absolute right-1 top-1/2 h-9 w-9 -translate-y-1/2 hover:bg-muted min-h-[36px] min-w-[36px] p-0 flex items-center justify-center',
   iconClass: 'h-3 w-3',
-  ariaLabel: 'Clear search'
+  ariaLabel: 'Clear search',
 })
 
 // Define emits

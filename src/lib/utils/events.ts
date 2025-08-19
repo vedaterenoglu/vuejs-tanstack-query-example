@@ -17,7 +17,7 @@ export function formatEventDate(
   options: Intl.DateTimeFormatOptions = {
     month: 'short',
     day: 'numeric',
-    year: 'numeric'
+    year: 'numeric',
   },
   locale = 'en-US'
 ): string {
@@ -37,7 +37,7 @@ export function formatEventTime(
   options: Intl.DateTimeFormatOptions = {
     hour: 'numeric',
     minute: '2-digit',
-    hour12: true
+    hour12: true,
   },
   locale = 'en-US'
 ): string {
@@ -60,9 +60,9 @@ export function formatEventPrice(
   if (price === 0) {
     return 'Free'
   }
-  
+
   return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency
+    currency,
   }).format(price)
 }

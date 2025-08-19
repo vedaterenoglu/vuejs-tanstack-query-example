@@ -9,7 +9,7 @@ import { mockCities } from '@/mock/cities'
 
 /**
  * Test checklist for CityGrid with real data
- * 
+ *
  * Manual verification steps:
  * 1. ✅ Mock data exists with 8 cities
  * 2. ✅ useCities composable fetches data
@@ -32,7 +32,7 @@ export const verifyCityGridData = () => {
     console.warn(`${index + 1}. ${city.city} (${city.citySlug})`)
     console.warn(`   Image: ${city.url}`)
   })
-  
+
   return {
     totalCities: mockCities.length,
     cities: mockCities,
@@ -40,8 +40,8 @@ export const verifyCityGridData = () => {
       loadingDelay: '1 second',
       gridLayout: '4 columns on xl, 3 on lg, 2 on sm, 1 on mobile',
       hoverEffects: 'scale, shadow, overlay, select button',
-      clickAction: 'navigates to /events?city={citySlug}'
-    }
+      clickAction: 'navigates to /events?city={citySlug}',
+    },
   }
 }
 

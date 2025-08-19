@@ -8,31 +8,50 @@
  */
 -->
 <template>
-  <section v-if="hasResults" :class="className" role="region" aria-label="Cities grid">
+  <section
+    v-if="hasResults"
+    :class="className"
+    role="region"
+    aria-label="Cities grid"
+  >
     <!-- Results Header -->
     <div class="flex items-center justify-between mb-6">
       <h3 class="text-sm text-muted-foreground font-normal">
         <template v-if="isSearchActive">
-          Showing {{ cities.length }} of {{ filteredCount }} results for "{{ searchQuery }}"
-          <span v-if="maxCities && filteredCount > maxCities" class="ml-2 text-xs">
+          Showing {{ cities.length }} of {{ filteredCount }} results for "{{
+            searchQuery
+          }}"
+          <span
+            v-if="maxCities && filteredCount > maxCities"
+            class="ml-2 text-xs"
+          >
             (limited to first {{ maxCities }})
           </span>
         </template>
         <template v-else>
-          {{ cities.length }} destination{{ cities.length !== 1 ? 's' : '' }} available
-          <span v-if="maxCities && filteredCount > maxCities" class="ml-2 text-xs">
+          {{ cities.length }} destination{{
+            cities.length !== 1 ? 's' : ''
+          }}
+          available
+          <span
+            v-if="maxCities && filteredCount > maxCities"
+            class="ml-2 text-xs"
+          >
             (showing first {{ maxCities }})
           </span>
         </template>
       </h3>
-      
+
       <!-- Loading Indicator for Partial Updates -->
-      <div v-if="isLoading" class="flex items-center gap-2 text-sm text-muted-foreground">
+      <div
+        v-if="isLoading"
+        class="flex items-center gap-2 text-sm text-muted-foreground"
+      >
         <RefreshCw class="h-3 w-3 animate-spin" />
         <span>Updating...</span>
       </div>
     </div>
-    
+
     <!-- Cities Grid -->
     <ScrollAnimateWrapper animation="fadeUp" :threshold="0.1" :duration="600">
       <ul :class="gridClasses" role="list">
@@ -47,12 +66,15 @@
         </li>
       </ul>
     </ScrollAnimateWrapper>
-    
+
     <!-- Load More Hint -->
-    <div v-if="shouldShowLoadMoreHint" class="text-center mt-8 p-4 bg-muted/50 rounded-lg">
+    <div
+      v-if="shouldShowLoadMoreHint"
+      class="text-center mt-8 p-4 bg-muted/50 rounded-lg"
+    >
       <p class="text-sm text-muted-foreground">
-        {{ filteredCount - (maxCities || 0) }} more cities available. Try refining your
-        search to see specific destinations.
+        {{ filteredCount - (maxCities || 0) }} more cities available. Try
+        refining your search to see specific destinations.
       </p>
     </div>
   </section>
@@ -61,7 +83,7 @@
 <script setup lang="ts">
 /**
  * CitiesGrid - Semantic cities list with results header and animations
- * 
+ *
  * Matches React CitiesGrid features:
  * - Semantic section with ARIA labeling
  * - Results header with count and search context
@@ -69,7 +91,7 @@
  * - Semantic ul/li list structure
  * - Load more hints when results exceed limit
  * - Customizable grid classes
- * 
+ *
  * Design Patterns:
  * - Container/Presentational Pattern
  * - Composition Pattern
@@ -108,10 +130,11 @@ const props = withDefaults(defineProps<CityGridProps>(), {
   searchQuery: '',
   filteredCount: 0,
   maxCities: undefined,
-  gridClasses: 'grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+  gridClasses:
+    'grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
   onCitySelect: undefined,
   showSelectButton: true,
-  className: ''
+  className: '',
 })
 
 // Router for navigation

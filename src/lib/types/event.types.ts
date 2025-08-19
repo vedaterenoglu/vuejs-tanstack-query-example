@@ -141,19 +141,30 @@ export const PageCacheSchema = z.object({
 })
 
 // TanStack Query hook result types following Single Responsibility Principle
-export type EventsQueryResult = BaseQueryResult<EventsApiResponse, TanStackQueryError>
-export type EventQueryResult = BaseQueryResult<SingleEventApiResponse, TanStackQueryError>
-
-// Mutation result types for event operations
-export type EventMutationResult<TData = unknown, TVariables = unknown> = BaseMutationResult<
-  TData,
-  TanStackQueryError,
-  TVariables
+export type EventsQueryResult = BaseQueryResult<
+  EventsApiResponse,
+  TanStackQueryError
+>
+export type EventQueryResult = BaseQueryResult<
+  SingleEventApiResponse,
+  TanStackQueryError
 >
 
+// Mutation result types for event operations
+export type EventMutationResult<
+  TData = unknown,
+  TVariables = unknown,
+> = BaseMutationResult<TData, TanStackQueryError, TVariables>
+
 // Event-specific query options
-export type EventQueryOptions = QueryOptions<EventsApiResponse, TanStackQueryError>
-export type SingleEventQueryOptions = QueryOptions<SingleEventApiResponse, TanStackQueryError>
+export type EventQueryOptions = QueryOptions<
+  EventsApiResponse,
+  TanStackQueryError
+>
+export type SingleEventQueryOptions = QueryOptions<
+  SingleEventApiResponse,
+  TanStackQueryError
+>
 
 // Pagination state schema for TanStack Query integration
 export const PaginationStateSchema = z.object({
@@ -184,15 +195,17 @@ export type PageCache = z.infer<typeof PageCacheSchema>
 export const eventQueryKeys = {
   all: ['events'] as const,
   lists: () => [...eventQueryKeys.all, 'list'] as const,
-  list: (filters?: EventsQueryParams) => [...eventQueryKeys.lists(), filters] as const,
+  list: (filters?: EventsQueryParams) =>
+    [...eventQueryKeys.lists(), filters] as const,
   details: () => [...eventQueryKeys.all, 'detail'] as const,
   detail: (slug: string) => [...eventQueryKeys.details(), slug] as const,
   search: (query: string) => [...eventQueryKeys.all, 'search', query] as const,
-  byCity: (citySlug: string) => [...eventQueryKeys.all, 'city', citySlug] as const,
+  byCity: (citySlug: string) =>
+    [...eventQueryKeys.all, 'city', citySlug] as const,
 } as const
 
 // Query Key Types for type safety
-export type EventQueryKey = 
+export type EventQueryKey =
   | typeof eventQueryKeys.all
   | ReturnType<typeof eventQueryKeys.lists>
   | ReturnType<typeof eventQueryKeys.list>

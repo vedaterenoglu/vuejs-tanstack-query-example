@@ -9,9 +9,7 @@
 -->
 <template>
   <section :class="className" aria-labelledby="search-heading">
-    <h2 id="search-heading" class="sr-only">
-      Search Cities
-    </h2>
+    <h2 id="search-heading" class="sr-only">Search Cities</h2>
     <div class="max-w-2xl mx-auto">
       <SearchBox
         :placeholder="placeholder"
@@ -30,13 +28,13 @@
 <script setup lang="ts">
 /**
  * SearchSection - Semantic search section with SearchBox
- * 
+ *
  * Matches React SearchSection:
  * - Semantic section element with ARIA labeling
  * - Hidden h2 for screen readers
  * - Centered layout with max-width
  * - Props forwarding to SearchBox
- * 
+ *
  * Design Patterns:
  * - Container Pattern: Wraps SearchBox
  * - Composition Pattern: Semantic section structure
@@ -67,7 +65,7 @@ const props = withDefaults(defineProps<SearchSectionProps>(), {
   disabled: false,
   searchQuery: '',
   onRefresh: undefined,
-  onSearchChange: undefined
+  onSearchChange: undefined,
 })
 
 // Handle search change event

@@ -15,7 +15,7 @@
       'shadow-lg backdrop-blur-sm',
       'transform transition-all duration-200',
       variantClasses,
-      className
+      className,
     ]"
     @click.stop="handleClick"
   >
@@ -26,12 +26,12 @@
 <script setup lang="ts">
 /**
  * EventButton Atom Component
- * 
+ *
  * Features:
  * - Action button with variants
  * - Click handling
  * - Disabled state
- * 
+ *
  * Design Patterns:
  * - Presentation Pattern: Display with interaction
  */
@@ -43,7 +43,7 @@ const props = withDefaults(defineProps<EventButtonProps>(), {
   label: 'View Details',
   disabled: false,
   variant: 'ghost',
-  className: ''
+  className: '',
 })
 
 const emit = defineEmits<{
@@ -55,7 +55,7 @@ const variantClasses = computed(() => {
   const variants = {
     primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
     secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/90',
-    ghost: 'bg-black/60 text-white hover:bg-black/70 hover:text-green-500'
+    ghost: 'bg-black/60 text-white hover:bg-black/70 hover:text-green-500',
   }
   return variants[props.variant || 'ghost']
 })

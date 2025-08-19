@@ -13,20 +13,14 @@
       v-if="!hasError"
       :src="src"
       :alt="alt"
-      :class="[
-        'w-full h-full object-cover object-center',
-        className
-      ]"
+      :class="['w-full h-full object-cover object-center', className]"
       loading="lazy"
       @error="handleError"
       @load="handleLoad"
     />
-    
+
     <!-- Fallback when image fails -->
-    <div
-      v-else
-      class="w-full h-full bg-muted flex items-center justify-center"
-    >
+    <div v-else class="w-full h-full bg-muted flex items-center justify-center">
       <svg
         class="h-12 w-12 text-muted-foreground"
         fill="none"
@@ -47,12 +41,12 @@
 <script setup lang="ts">
 /**
  * EventImage Atom Component
- * 
+ *
  * Features:
  * - Lazy loading
  * - Error fallback
  * - Full container coverage
- * 
+ *
  * Design Patterns:
  * - Error Handling Pattern: Graceful fallback
  * - Performance Pattern: Lazy loading
@@ -63,7 +57,7 @@ import { type EventImageProps } from '../types'
 
 const props = withDefaults(defineProps<EventImageProps>(), {
   alt: '',
-  className: ''
+  className: '',
 })
 
 const emit = defineEmits<{

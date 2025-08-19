@@ -22,40 +22,40 @@ const isLoading = ref(false)
 
 /**
  * City selection composable
- * 
+ *
  * Manages the currently selected city state across the application.
  * Provides loading state for async operations.
- * 
+ *
  * @returns City selection state and methods
  */
 export const useCitySelection = (): UseCitySelectionReturn => {
   const selectCity = async (citySlug: string): Promise<void> => {
     isLoading.value = true
-    
+
     try {
       // Simulate async operation (will be replaced with actual API call)
       await new Promise(resolve => setTimeout(resolve, 500))
-      
+
       // For now, just set a mock city
       selectedCity.value = {
         city: citySlug,
         citySlug,
         url: '',
-        alt: ''
+        alt: '',
       }
     } finally {
       isLoading.value = false
     }
   }
-  
+
   const clearSelection = () => {
     selectedCity.value = null
   }
-  
+
   return {
     selectedCity,
     selectCity,
     isLoading,
-    clearSelection
+    clearSelection,
   }
 }

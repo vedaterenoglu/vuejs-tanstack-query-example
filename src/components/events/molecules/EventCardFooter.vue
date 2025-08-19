@@ -8,12 +8,12 @@
  */
 -->
 <template>
-  <div 
+  <div
     :class="[
       'event-card-footer absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20',
       'transition-all duration-300 ease-out',
       isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75',
-      className
+      className,
     ]"
   >
     <!-- Event Button -->
@@ -30,11 +30,11 @@
 <script setup lang="ts">
 /**
  * EventCardFooter Molecule Component
- * 
+ *
  * Features:
  * - Container for action button
  * - Composes EventButton atom
- * 
+ *
  * Design Patterns:
  * - Container Pattern: Contains atoms
  * - Composition Pattern: Composes atoms
@@ -51,6 +51,6 @@ interface EventCardFooterProps {
 withDefaults(defineProps<EventCardFooterProps>(), {
   disabled: false,
   isVisible: false,
-  className: ''
+  className: '',
 })
 </script>

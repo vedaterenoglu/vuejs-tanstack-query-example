@@ -5,24 +5,24 @@
  * @solid SRP (Event queries only), OCP (Extensible), DIP (Depends on abstractions)
  */
 
-import {
-  useQuery,
-  useInfiniteQuery,
-  useSuspenseQuery,
-} from '@tanstack/vue-query'
+import { useQuery, useInfiniteQuery } from '@tanstack/vue-query'
 import { computed, type MaybeRef, unref } from 'vue'
 
 import { eventQueryKeys } from '@/lib/types/event.types'
-import type { Event, EventsQueryParams, EventsApiResponse } from '@/lib/types/event.types'
+import type {
+  Event,
+  EventsQueryParams,
+  EventsApiResponse,
+} from '@/lib/types/event.types'
 import { eventApiService } from '@/services/api'
 
 /**
  * useEventsQuery - TanStack Query composables for events data fetching
- * 
+ *
  * Provides comprehensive Vue Query composables for events API integration including
  * standard queries, infinite queries, suspense queries, and specialized composables
  * for city-specific and search-based event fetching with proper caching.
- * 
+ *
  * Design Patterns Applied:
  * - Composable Pattern: Encapsulates TanStack Query logic for reuse
  * - Query Key Pattern: Consistent query key generation for cache management
@@ -33,11 +33,15 @@ import { eventApiService } from '@/services/api'
 /**
  * Query functions for events API
  */
-const fetchEvents = async (params: EventsQueryParams): Promise<EventsApiResponse> => {
+const fetchEvents = async (
+  params: EventsQueryParams
+): Promise<EventsApiResponse> => {
   return await eventApiService.getEvents(params)
 }
 
-const fetchEventsByCity = async (citySlug: string): Promise<EventsApiResponse> => {
+const fetchEventsByCity = async (
+  citySlug: string
+): Promise<EventsApiResponse> => {
   const params: EventsQueryParams = {
     search: citySlug, // Use search parameter with citySlug value
     limit: 50,
@@ -48,7 +52,9 @@ const fetchEventsByCity = async (citySlug: string): Promise<EventsApiResponse> =
   return await eventApiService.getEvents(params)
 }
 
-const fetchEventsWithSearch = async (searchQuery: string): Promise<EventsApiResponse> => {
+const fetchEventsWithSearch = async (
+  searchQuery: string
+): Promise<EventsApiResponse> => {
   const params: EventsQueryParams = {
     search: searchQuery,
     limit: 50,
@@ -84,7 +90,9 @@ const fetchEventBySlug = async (slug: string): Promise<Event> => {
  * Composable for fetching events with pagination and filtering
  * Follows Vue 3 Composition API Pattern with data logic abstraction
  */
-export function useEventsQuery(params?: MaybeRef<EventsQueryParams | undefined>) {
+export function useEventsQuery(
+  params?: MaybeRef<EventsQueryParams | undefined>
+) {
   const queryParams = computed(() => {
     const defaultParams: EventsQueryParams = {
       limit: 20,
@@ -98,7 +106,9 @@ export function useEventsQuery(params?: MaybeRef<EventsQueryParams | undefined>)
 
   const queryKey = computed(() => {
     const filters = Object.fromEntries(
-      Object.entries(queryParams.value).filter(([, value]) => value !== undefined)
+      Object.entries(queryParams.value).filter(
+        ([, value]) => value !== undefined
+      )
     )
     return eventQueryKeys.list(filters)
   })
@@ -121,7 +131,9 @@ export function useEventsByCity(
   enabled: MaybeRef<boolean> = true
 ) {
   const unwrappedCitySlug = computed(() => unref(citySlug))
-  const isEnabled = computed(() => unref(enabled) && Boolean(unwrappedCitySlug.value))
+  const isEnabled = computed(
+    () => unref(enabled) && Boolean(unwrappedCitySlug.value)
+  )
 
   const queryKey = computed(() =>
     eventQueryKeys.list({ search: unwrappedCitySlug.value })
@@ -145,8 +157,8 @@ export function useEventsSearch(
   enabled: MaybeRef<boolean> = true
 ) {
   const unwrappedSearchQuery = computed(() => unref(searchQuery))
-  const isEnabled = computed(() =>
-    unref(enabled) && Boolean(unwrappedSearchQuery.value.trim())
+  const isEnabled = computed(
+    () => unref(enabled) && Boolean(unwrappedSearchQuery.value.trim())
   )
 
   const queryKey = computed(() =>
@@ -167,7 +179,9 @@ export function useEventsSearch(
  * Implements infinite scrolling pattern with TanStack Query
  */
 export function useInfiniteEventsQuery(
-  baseParams: MaybeRef<Partial<Omit<EventsQueryParams, 'limit' | 'offset'>>> = {},
+  baseParams: MaybeRef<
+    Partial<Omit<EventsQueryParams, 'limit' | 'offset'>>
+  > = {},
   itemsPerPage: MaybeRef<number> = 20
 ) {
   const unwrappedBaseParams = computed(() => unref(baseParams))
@@ -221,7 +235,9 @@ export function useEventQuery(
   enabled: MaybeRef<boolean> = true
 ) {
   const unwrappedSlug = computed(() => unref(slug))
-  const isEnabled = computed(() => unref(enabled) && Boolean(unwrappedSlug.value))
+  const isEnabled = computed(
+    () => unref(enabled) && Boolean(unwrappedSlug.value)
+  )
 
   const queryKey = computed(() => eventQueryKeys.detail(unwrappedSlug.value))
 
@@ -242,7 +258,7 @@ export function useEventSuspenseQuery(slug: MaybeRef<string>) {
   const unwrappedSlug = computed(() => unref(slug))
   const queryKey = computed(() => eventQueryKeys.detail(unwrappedSlug.value))
 
-  return useSuspenseQuery({
+  return useQuery({
     queryKey,
     queryFn: () => fetchEventBySlug(unwrappedSlug.value),
     staleTime: 10 * 60 * 1000,
@@ -253,7 +269,9 @@ export function useEventSuspenseQuery(slug: MaybeRef<string>) {
  * Utility composable for combining events data with computed values
  * Follows Vue 3 pattern of extracting logic into composables
  */
-export function useEventsWithMeta(params?: MaybeRef<EventsQueryParams | undefined>) {
+export function useEventsWithMeta(
+  params?: MaybeRef<EventsQueryParams | undefined>
+) {
   const eventsQuery = useEventsQuery(params)
 
   const computedData = computed(() => {

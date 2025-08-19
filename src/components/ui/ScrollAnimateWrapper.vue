@@ -24,18 +24,18 @@
 <script setup lang="ts">
 /**
  * ScrollAnimateWrapper - Refactored using composables
- * 
+ *
  * Now delegates to:
  * - AnimationProvider: Handles animation wrapping
  * - useIntersectionObserver: Scroll detection (via AnimationProvider)
  * - useAnimation: Animation state (via AnimationProvider)
- * 
+ *
  * Maintains all original features:
  * - Intersection Observer for scroll detection
  * - Multiple animation types support
  * - Configurable threshold and duration
  * - One-time animation on first view
- * 
+ *
  * Design Patterns:
  * - Delegation Pattern: Delegates logic to composables
  * - Composition Pattern: Composes from smaller units
@@ -61,7 +61,7 @@ const props = withDefaults(defineProps<ScrollAnimateWrapperProps>(), {
   threshold: 0.1,
   duration: 600,
   delay: 0,
-  className: ''
+  className: '',
 })
 
 // Template ref
@@ -75,9 +75,9 @@ const animationType = computed<AnimationType>(() => {
     fadeIn: 'fadeIn',
     fadeDown: 'fadeDown',
     slideIn: 'slideIn',
-    zoomIn: 'zoomIn'
+    zoomIn: 'zoomIn',
   }
-  
+
   return animationMap[props.animation] || 'fadeUp'
 })
 </script>
@@ -95,7 +95,8 @@ const animationType = computed<AnimationType>(() => {
 
 /* FadeUp animation */
 .animate-fadeUp {
-  animation: fadeUp v-bind(duration + 'ms') cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: fadeUp v-bind(duration + 'ms') cubic-bezier(0.4, 0, 0.2, 1)
+    forwards;
 }
 
 @keyframes fadeUp {
@@ -111,7 +112,8 @@ const animationType = computed<AnimationType>(() => {
 
 /* FadeIn animation */
 .animate-fadeIn {
-  animation: fadeIn v-bind(duration + 'ms') cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: fadeIn v-bind(duration + 'ms') cubic-bezier(0.4, 0, 0.2, 1)
+    forwards;
 }
 
 @keyframes fadeIn {
@@ -125,7 +127,8 @@ const animationType = computed<AnimationType>(() => {
 
 /* SlideIn animation */
 .animate-slideIn {
-  animation: slideIn v-bind(duration + 'ms') cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: slideIn v-bind(duration + 'ms') cubic-bezier(0.4, 0, 0.2, 1)
+    forwards;
 }
 
 @keyframes slideIn {

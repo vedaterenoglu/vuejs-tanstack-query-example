@@ -38,7 +38,13 @@ import { buttonVariants } from './button-variants'
 
 // Props interface
 interface ButtonProps {
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
   size?: 'default' | 'sm' | 'lg' | 'icon'
   asChild?: boolean
 }

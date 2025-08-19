@@ -21,13 +21,10 @@
         @keydown="handleKeyDown"
       >
         <template #clear-button="{ hasValue }">
-          <ClearButton
-            :visible="hasValue"
-            @click="handleClearClick"
-          />
+          <ClearButton :visible="hasValue" @click="handleClearClick" />
         </template>
       </SearchIconWrapper>
-      
+
       <!-- Refresh Button -->
       <RefreshButton
         :visible="showRefreshButton"
@@ -41,20 +38,20 @@
 <script setup lang="ts">
 /**
  * SearchBox - Refactored container using decomposed components
- * 
+ *
  * Now composed of:
  * - SearchIconWrapper (molecule): Input with icon
  * - ClearButton (atom): Clear button
- * - RefreshButton (atom): Refresh button  
+ * - RefreshButton (atom): Refresh button
  * - useDebounce (composable): Debouncing logic
- * 
+ *
  * Maintains all original features:
  * - Debounced search with configurable delay
  * - Clear button when input has value
  * - Refresh button with configurable visibility
  * - Keyboard support (Escape to clear)
  * - Full accessibility
- * 
+ *
  * Design Patterns:
  * - Container Pattern: Orchestrates child components
  * - Composition Pattern: Composes from smaller units
@@ -90,7 +87,7 @@ const props = withDefaults(defineProps<SearchBoxProps>(), {
   showRefreshButton: true,
   searchQuery: '',
   onRefresh: undefined,
-  onSearchChange: undefined
+  onSearchChange: undefined,
 })
 
 // Define emits
@@ -106,12 +103,15 @@ const ariaLabel = 'Search cities'
 const { debouncedValue } = useDebounce(inputValue, { delay: props.debounceMs })
 
 // Sync with external searchQuery
-watch(() => props.searchQuery, (newValue) => {
-  inputValue.value = newValue
-})
+watch(
+  () => props.searchQuery,
+  newValue => {
+    inputValue.value = newValue
+  }
+)
 
 // Emit debounced value changes
-watch(debouncedValue, (newValue) => {
+watch(debouncedValue, newValue => {
   if (props.onSearchChange) {
     props.onSearchChange(newValue)
   }

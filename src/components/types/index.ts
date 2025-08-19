@@ -255,7 +255,4 @@ export const isEvent = (obj: unknown): obj is Event => {
 }
 
 // Export all interfaces for barrel export pattern
-export type {
-  City,
-  Event
-}
+export type { City, Event }

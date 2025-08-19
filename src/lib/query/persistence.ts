@@ -127,20 +127,22 @@ class QueryPersistenceService {
       storageKey: config.storageKey,
       maxAge: config.maxAge || 24 * 60 * 60 * 1000, // 24 hours default
       serialize: config.serialize || JSON.stringify,
-      deserialize: config.deserialize || ((data: string) => {
-        try {
-          return JSON.parse(data) as PersistedClient
-        } catch {
-          return { 
-            buster: '',
-            timestamp: Date.now(),
-            clientState: { 
-              queries: [], 
-              mutations: [] 
-            }
-          } as PersistedClient
-        }
-      }),
+      deserialize:
+        config.deserialize ||
+        ((data: string) => {
+          try {
+            return JSON.parse(data) as PersistedClient
+          } catch {
+            return {
+              buster: '',
+              timestamp: Date.now(),
+              clientState: {
+                queries: [],
+                mutations: [],
+              },
+            } as PersistedClient
+          }
+        }),
       buster: config.buster || '',
       hydrateOptions: config.hydrateOptions || {
         defaultOptions: {
@@ -177,7 +179,9 @@ class QueryPersistenceService {
       storage: this.storage,
       key: this.config.storageKey,
       serialize: this.config.serialize,
-      deserialize: this.config.deserialize as (cachedString: string) => PersistedClient,
+      deserialize: this.config.deserialize as (
+        cachedString: string
+      ) => PersistedClient,
       throttleTime: 1000, // Throttle persistence operations
     })
   }
@@ -261,7 +265,7 @@ const defaultPersistenceConfig: PersistenceConfig = {
     },
   },
   dehydrateOptions: {
-    shouldDehydrateQuery: (query) => {
+    shouldDehydrateQuery: query => {
       // Only persist successful queries
       return query && typeof query === 'object' && 'state' in query
         ? (query.state as { status?: string }).status === 'success'
@@ -307,4 +311,4 @@ export const usePersistence = () => {
  * Utility Types
  */
 export type { StorageInterface, PersistenceConfig }
-export { QueryPersistenceService, BrowserStorage, MemoryStorage}
+export { QueryPersistenceService, BrowserStorage, MemoryStorage }

@@ -28,13 +28,13 @@
 <script setup lang="ts">
 /**
  * SearchInput - Atom component for search input field
- * 
+ *
  * Responsibilities:
  * - Display text input field
  * - Handle input events
  * - Handle keyboard events
  * - Provide accessibility attributes
- * 
+ *
  * Design Patterns:
  * - Controlled Component: Parent controls value
  * - Input Pattern: Standard form input
@@ -66,13 +66,13 @@ withDefaults(defineProps<SearchInputProps>(), {
   role: 'searchbox',
   ariaExpanded: false,
   ariaAutocomplete: 'list',
-  inputMode: 'search'
+  inputMode: 'search',
 })
 
 // Define emits
 const emit = defineEmits<{
   'update:modelValue': [value: string]
-  'keydown': [event: KeyboardEvent]
+  keydown: [event: KeyboardEvent]
 }>()
 
 // Event handlers

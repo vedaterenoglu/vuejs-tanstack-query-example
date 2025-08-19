@@ -45,7 +45,7 @@ export interface BaseQueryResult<TData = unknown, TError = TanStackQueryError> {
 export interface BaseMutationResult<
   TData = unknown,
   TError = TanStackQueryError,
-  TVariables = unknown
+  TVariables = unknown,
 > {
   mutate: (variables: TVariables) => void
   mutateAsync: (variables: TVariables) => Promise<TData>
@@ -79,7 +79,7 @@ export interface QueryOptions<TData = unknown, TError = TanStackQueryError> {
 export interface MutationOptions<
   TData = unknown,
   TError = TanStackQueryError,
-  TVariables = unknown
+  TVariables = unknown,
 > {
   onMutate?: (variables: TVariables) => Promise<unknown> | unknown
   onSuccess?: (data: TData, variables: TVariables, context: unknown) => void
@@ -96,7 +96,10 @@ export interface MutationOptions<
 }
 
 // Infinite Query Result Interface
-export interface InfiniteQueryResult<TData = unknown, TError = TanStackQueryError> {
+export interface InfiniteQueryResult<
+  TData = unknown,
+  TError = TanStackQueryError,
+> {
   data: InfiniteData<TData> | undefined
   isLoading: boolean
   isError: boolean
@@ -156,7 +159,10 @@ export interface QueryState<TData = unknown> {
 }
 
 // Optimistic Update Context Interface
-export interface OptimisticUpdateContext<TData = unknown, TVariables = unknown> {
+export interface OptimisticUpdateContext<
+  TData = unknown,
+  TVariables = unknown,
+> {
   previousData: TData | undefined
   optimisticData: TData
   variables: TVariables
@@ -188,7 +194,9 @@ export interface QueryClientConfig {
 }
 
 // Type Guards for TanStack Query patterns
-export const isTanStackQueryError = (error: unknown): error is TanStackQueryError => {
+export const isTanStackQueryError = (
+  error: unknown
+): error is TanStackQueryError => {
   return (
     typeof error === 'object' &&
     error !== null &&
@@ -205,28 +213,34 @@ export const isQuerySuccess = <TData>(
 
 export const isMutationSuccess = <TData, TVariables>(
   result: BaseMutationResult<TData, TanStackQueryError, TVariables>
-): result is BaseMutationResult<TData, TanStackQueryError, TVariables> & { data: TData } => {
+): result is BaseMutationResult<TData, TanStackQueryError, TVariables> & {
+  data: TData
+} => {
   return result.isSuccess && result.data !== undefined
 }
 
 // Utility Types for TanStack Query
 export type QueryKey = readonly unknown[]
-export type QueryFunction<TData = unknown> = (context: { queryKey: QueryKey }) => Promise<TData>
+export type QueryFunction<TData = unknown> = (context: {
+  queryKey: QueryKey
+}) => Promise<TData>
 export type MutationFunction<TData = unknown, TVariables = unknown> = (
   variables: TVariables
 ) => Promise<TData>
 
 // Composable Return Types for consistent typing across the application
-export type UseQueryResult<TData = unknown, TError = TanStackQueryError> = BaseQueryResult<
-  TData,
-  TError
->
+export type UseQueryResult<
+  TData = unknown,
+  TError = TanStackQueryError,
+> = BaseQueryResult<TData, TError>
 
 export type UseMutationResult<
   TData = unknown,
   TError = TanStackQueryError,
-  TVariables = unknown
+  TVariables = unknown,
 > = BaseMutationResult<TData, TError, TVariables>
 
-export type UseInfiniteQueryResult<TData = unknown, TError = TanStackQueryError> =
-  InfiniteQueryResult<TData, TError>
+export type UseInfiniteQueryResult<
+  TData = unknown,
+  TError = TanStackQueryError,
+> = InfiniteQueryResult<TData, TError>

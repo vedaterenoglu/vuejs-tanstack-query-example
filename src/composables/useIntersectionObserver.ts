@@ -29,14 +29,14 @@ export interface UseIntersectionObserverReturn {
 
 /**
  * Composable for detecting element visibility using Intersection Observer API
- * 
+ *
  * Provides reactive visibility state for elements entering/leaving viewport.
  * Useful for scroll animations, lazy loading, and performance optimizations.
- * 
+ *
  * @param target - Element ref to observe
  * @param options - Intersection Observer options
  * @returns Intersection state and control functions
- * 
+ *
  * @example
  * ```ts
  * const elementRef = ref<HTMLElement>()
@@ -44,7 +44,7 @@ export interface UseIntersectionObserverReturn {
  *   threshold: 0.1,
  *   once: true
  * })
- * 
+ *
  * watch(isIntersecting, (visible) => {
  *   if (visible) {
  *     // Element is in viewport
@@ -61,15 +61,15 @@ export function useIntersectionObserver(
     threshold = 0,
     root = null,
     rootMargin = '0px',
-    once = false
+    once = false,
   } = options
-  
+
   // State
   const isIntersecting = ref(false)
   const isVisible = ref(false)
-  
+
   let observer: IntersectionObserver | null = null
-  
+
   // Disconnect observer
   const disconnect = () => {
     if (observer) {
@@ -77,24 +77,24 @@ export function useIntersectionObserver(
       observer = null
     }
   }
-  
+
   // Observe target element
   const observe = () => {
     if (!target.value) return
-    
+
     // Disconnect existing observer
     disconnect()
-    
+
     // Create new observer
     observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           isIntersecting.value = entry.isIntersecting
-          
+
           // Update visibility state
           if (entry.isIntersecting) {
             isVisible.value = true
-            
+
             // Disconnect if observing once
             if (once) {
               disconnect()
@@ -108,27 +108,27 @@ export function useIntersectionObserver(
       {
         threshold,
         root,
-        rootMargin
+        rootMargin,
       }
     )
-    
+
     // Start observing
     observer.observe(target.value)
   }
-  
+
   // Lifecycle
   onMounted(() => {
     observe()
   })
-  
+
   onUnmounted(() => {
     disconnect()
   })
-  
+
   return {
     isIntersecting,
     isVisible,
     disconnect,
-    observe
+    observe,
   }
 }

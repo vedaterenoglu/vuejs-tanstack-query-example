@@ -26,13 +26,13 @@
 <script setup lang="ts">
 /**
  * RefreshButton - Atom component for refreshing data
- * 
+ *
  * Responsibilities:
  * - Display refresh button with icon
  * - Handle click events
  * - Control visibility and state
  * - Provide accessibility
- * 
+ *
  * Design Patterns:
  * - Button Pattern: Standard button behavior
  */
@@ -61,7 +61,7 @@ withDefaults(defineProps<RefreshButtonProps>(), {
   buttonClass: 'min-h-[44px] min-w-[44px] focus-visible-mobile',
   iconClass: 'h-4 w-4',
   ariaLabel: 'Refresh data',
-  title: 'Refresh data'
+  title: 'Refresh data',
 })
 
 // Define emits

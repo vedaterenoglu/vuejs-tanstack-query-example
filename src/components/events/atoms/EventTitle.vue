@@ -12,7 +12,7 @@
     :class="[
       'event-title font-semibold text-white',
       truncate ? 'truncate' : '',
-      className
+      className,
     ]"
     :style="{ textShadow: '1px 1px 3px rgba(0,0,0,0.9)' }"
   >
@@ -23,12 +23,12 @@
 <script setup lang="ts">
 /**
  * EventTitle Atom Component
- * 
+ *
  * Features:
  * - Title text display
  * - Optional truncation
  * - White text with shadow
- * 
+ *
  * Design Patterns:
  * - Presentation Pattern: Pure display component
  */
@@ -36,6 +36,6 @@ import { type EventTitleProps } from '../types'
 
 withDefaults(defineProps<EventTitleProps>(), {
   truncate: true,
-  className: 'text-base'
+  className: 'text-base',
 })
 </script>

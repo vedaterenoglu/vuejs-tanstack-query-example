@@ -56,12 +56,17 @@
           />
         </svg>
         <p class="text-lg font-medium">No events found</p>
-        <p class="text-sm mt-2">Try adjusting your search or check back later</p>
+        <p class="text-sm mt-2">
+          Try adjusting your search or check back later
+        </p>
       </div>
     </div>
 
     <!-- Loading State -->
-    <div v-else-if="isLoading" class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    <div
+      v-else-if="isLoading"
+      class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+    >
       <div
         v-for="i in 6"
         :key="`skeleton-${i}`"
@@ -100,13 +105,13 @@
 <script setup lang="ts">
 /**
  * EventGrid Organism Component
- * 
+ *
  * Features:
  * - Responsive grid layout
  * - Loading, empty, and error states
  * - Uses EventCard organism
  * - Accessibility support
- * 
+ *
  * Design Patterns:
  * - Container Pattern: Contains event cards
  * - Composition Pattern: Composes EventCard organisms
@@ -121,7 +126,7 @@ const props = withDefaults(defineProps<EventGridProps>(), {
   isLoading: false,
   error: null,
   hasMore: false,
-  className: ''
+  className: '',
 })
 
 const emit = defineEmits<{

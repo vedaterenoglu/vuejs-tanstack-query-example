@@ -14,7 +14,7 @@
       class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none"
       aria-hidden="true"
     />
-    
+
     <!-- Search Input with Padding for Icon -->
     <SearchInput
       v-model="localValue"
@@ -29,7 +29,7 @@
       :input-mode="inputMode"
       @keydown="handleKeyDown"
     />
-    
+
     <!-- Clear Button Slot -->
     <slot name="clear-button" :has-value="hasValue" />
   </div>
@@ -38,13 +38,13 @@
 <script setup lang="ts">
 /**
  * SearchIconWrapper - Molecule component combining search icon with input
- * 
+ *
  * Responsibilities:
  * - Display search icon in input field
  * - Manage input padding for icon
  * - Provide slot for clear button
  * - Handle value synchronization
- * 
+ *
  * Design Patterns:
  * - Composition Pattern: Combines icon and input
  * - Wrapper Pattern: Wraps input with additional UI
@@ -81,13 +81,13 @@ const props = withDefaults(defineProps<SearchIconWrapperProps>(), {
   ariaExpanded: false,
   ariaAutocomplete: 'list',
   inputMode: 'search',
-  showClearButton: true
+  showClearButton: true,
 })
 
 // Define emits
 const emit = defineEmits<{
   'update:modelValue': [value: string]
-  'keydown': [event: KeyboardEvent]
+  keydown: [event: KeyboardEvent]
 }>()
 
 // Local value for two-way binding
@@ -97,12 +97,15 @@ const localValue = ref(props.modelValue)
 const hasValue = computed(() => localValue.value.length > 0)
 
 // Sync with parent modelValue
-watch(() => props.modelValue, (newValue) => {
-  localValue.value = newValue
-})
+watch(
+  () => props.modelValue,
+  newValue => {
+    localValue.value = newValue
+  }
+)
 
 // Emit changes to parent
-watch(localValue, (newValue) => {
+watch(localValue, newValue => {
   emit('update:modelValue', newValue)
 })
 

@@ -8,11 +8,11 @@
  */
 -->
 <template>
-  <article 
+  <article
     class="city-card group relative aspect-square overflow-hidden rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
     :class="[
       isSelected ? 'ring-2 ring-primary ring-offset-2' : '',
-      disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+      disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
     ]"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
@@ -27,7 +27,7 @@
       @error="handleImageError"
       @load="handleImageLoad"
     />
-    
+
     <!-- Overlay Component -->
     <CityCardOverlay
       :city-name="city.city"
@@ -37,7 +37,7 @@
       :disabled="disabled"
       :variant="variant"
     />
-    
+
     <!-- Select Button Component -->
     <CityCardSelectButton
       :show-button="showSelectButton"
@@ -88,7 +88,7 @@ const props = withDefaults(defineProps<CityCardProps>(), {
   className: '',
   showSelectButton: true,
   disabled: false,
-  variant: 'default'
+  variant: 'default',
 })
 
 // Define emits
@@ -107,15 +107,15 @@ const {
   handleMouseLeave,
   handleImageError,
   handleImageLoad,
-  handleClick: composableHandleClick
+  handleClick: composableHandleClick,
 } = useCityCard({
   city: props.city,
   showSelectButton: props.showSelectButton,
   disabled: props.disabled,
   onSelect: props.onSelect,
-  onClick: (city) => {
+  onClick: city => {
     emit('click', city)
-  }
+  },
 })
 
 // Wrapper to emit event

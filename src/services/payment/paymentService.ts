@@ -65,7 +65,7 @@ async function fetchEventForPayment(slug: string): Promise<Event> {
     throw new Error(`Failed to fetch event: ${response.status}`)
   }
 
-  const responseData = await response.json() as { data?: Event } | Event
+  const responseData = (await response.json()) as { data?: Event } | Event
 
   // Handle API response wrapper
   if ('data' in responseData && responseData.data) {
@@ -106,13 +106,15 @@ async function createStripeCheckoutSession(paymentData: {
   })
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ message: '' })) as { message?: string }
+    const errorData = (await response
+      .json()
+      .catch(() => ({ message: '' }))) as { message?: string }
     throw new Error(
       errorData.message || `Payment creation failed: ${response.status}`
     )
   }
 
-  const result = await response.json() as PaymentResponse
+  const result = (await response.json()) as PaymentResponse
   return {
     checkoutUrl: result.checkoutUrl,
     sessionId: result.sessionId,

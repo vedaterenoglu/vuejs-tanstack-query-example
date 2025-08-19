@@ -8,12 +8,10 @@
  */
 -->
 <template>
-  <div 
+  <div
     v-if="showButton"
     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 transition-all duration-300 ease-out pointer-events-none"
-    :class="[
-      isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-    ]"
+    :class="[isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75']"
   >
     <Button
       @click.stop.prevent="handleClick"
@@ -24,7 +22,10 @@
       :class="{ 'hover:scale-110': isHovered }"
       :aria-label="ariaLabel"
     >
-      <div v-if="isLoading" class="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+      <div
+        v-if="isLoading"
+        class="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+      />
       <span v-else>{{ buttonText }}</span>
     </Button>
   </div>
@@ -33,13 +34,13 @@
 <script setup lang="ts">
 /**
  * CityCardSelectButton - Atom component for city selection button
- * 
+ *
  * Responsibilities:
  * - Display select button with visibility control
  * - Handle click events with stop propagation
  * - Show loading state during selection
  * - Provide accessible button with ARIA label
- * 
+ *
  * Design Patterns:
  * - Button Pattern: Reusable button component
  * - Loading State Pattern: Visual feedback during async operations
@@ -67,7 +68,7 @@ const props = withDefaults(defineProps<CityCardSelectButtonProps>(), {
   disabled: false,
   isSelected: false,
   cityName: '',
-  buttonText: 'Select'
+  buttonText: 'Select',
 })
 
 // Define emits
@@ -76,8 +77,8 @@ const emit = defineEmits<{
 }>()
 
 // Computed aria label
-const ariaLabel = props.isSelected 
-  ? `${props.cityName} selected` 
+const ariaLabel = props.isSelected
+  ? `${props.cityName} selected`
   : `Select ${props.cityName}`
 
 // Event handler

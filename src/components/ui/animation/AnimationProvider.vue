@@ -20,13 +20,13 @@
 <script setup lang="ts">
 /**
  * AnimationProvider - Component for providing animation context
- * 
+ *
  * Responsibilities:
  * - Wrap content with animation container
  * - Apply animation classes and styles
  * - Provide animation state to children via slots
  * - Handle intersection observer integration
- * 
+ *
  * Design Patterns:
  * - Provider Pattern: Provides animation context
  * - Render Pattern: Flexible content rendering via slots
@@ -55,34 +55,30 @@ const props = withDefaults(defineProps<AnimationProviderProps>(), {
   once: true,
   threshold: 0.1,
   className: '',
-  enableIntersection: true
+  enableIntersection: true,
 })
 
 // Template ref
 const elementRef = ref<HTMLElement>()
 
 // Use composables
-const {
-  animationClass,
-  animationStyle,
-  isAnimating,
-  triggerAnimation
-} = useAnimation({
-  animation: props.animation,
-  duration: props.duration,
-  delay: props.delay,
-  once: props.once
-})
+const { animationClass, animationStyle, isAnimating, triggerAnimation } =
+  useAnimation({
+    animation: props.animation,
+    duration: props.duration,
+    delay: props.delay,
+    once: props.once,
+  })
 
 const { isVisible } = props.enableIntersection
   ? useIntersectionObserver(elementRef, {
       threshold: props.threshold,
-      once: props.once
+      once: props.once,
     })
   : { isVisible: ref(true) }
 
 // Trigger animation when visible
-watch(isVisible, (visible) => {
+watch(isVisible, visible => {
   if (visible && props.enableIntersection) {
     triggerAnimation()
   }

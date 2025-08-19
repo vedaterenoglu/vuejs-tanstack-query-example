@@ -12,15 +12,18 @@
     <!-- Error State -->
     <div v-if="hasError" class="error-boundary-fallback">
       <!-- Custom Error Slot -->
-      <slot 
-        v-if="$slots.error" 
-        name="error" 
-        :error="error" 
+      <slot
+        v-if="$slots.error"
+        name="error"
+        :error="error"
         :reset="resetError"
       />
-      
+
       <!-- Default Error Fallback -->
-      <div v-else class="p-6 border border-destructive/20 rounded-lg bg-destructive/5">
+      <div
+        v-else
+        class="p-6 border border-destructive/20 rounded-lg bg-destructive/5"
+      >
         <div class="flex flex-col items-center text-center space-y-4">
           <AlertTriangle class="h-12 w-12 text-destructive" />
           <div>
@@ -31,10 +34,14 @@
               {{ fallbackMessage }}
             </p>
             <details v-if="showDetails && error" class="mt-4 text-left">
-              <summary class="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
+              <summary
+                class="cursor-pointer text-sm text-muted-foreground hover:text-foreground"
+              >
                 Technical Details
               </summary>
-              <pre class="mt-2 text-xs bg-muted p-2 rounded overflow-auto">{{ errorDetails }}</pre>
+              <pre class="mt-2 text-xs bg-muted p-2 rounded overflow-auto">{{
+                errorDetails
+              }}</pre>
             </details>
           </div>
           <Button
@@ -49,7 +56,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Normal Content -->
     <slot v-else />
   </div>
@@ -58,18 +65,18 @@
 <script setup lang="ts">
 /**
  * ErrorBoundary - Component for catching and handling errors
- * 
+ *
  * Responsibilities:
  * - Catch errors from child components
  * - Display fallback UI on error
  * - Provide error reset functionality
  * - Log errors for debugging
- * 
+ *
  * Vue.js Implementation:
  * - Uses onErrorCaptured lifecycle hook
  * - Provides slot for custom error UI
  * - Supports error reset functionality
- * 
+ *
  * Design Patterns:
  * - Error Boundary Pattern: Catch errors in component tree
  * - Fallback Pattern: Show fallback UI on error
@@ -97,7 +104,7 @@ const props = withDefaults(defineProps<ErrorBoundaryProps>(), {
   showDetails: import.meta.env.DEV, // Show details in development
   showReset: true,
   onError: undefined,
-  propagate: false
+  propagate: false,
 })
 
 // State
@@ -107,12 +114,16 @@ const error = ref<Error | null>(null)
 // Computed error details
 const errorDetails = computed(() => {
   if (!error.value) return ''
-  
-  return JSON.stringify({
-    message: error.value.message,
-    stack: error.value.stack,
-    name: error.value.name
-  }, null, 2)
+
+  return JSON.stringify(
+    {
+      message: error.value.message,
+      stack: error.value.stack,
+      name: error.value.name,
+    },
+    null,
+    2
+  )
 })
 
 // Error handling
@@ -120,21 +131,21 @@ onErrorCaptured((err: Error, instance, info) => {
   // Update state
   hasError.value = true
   error.value = err
-  
+
   // Log error in development
   if (import.meta.env.DEV) {
     console.error('ErrorBoundary caught:', {
       error: err,
       instance,
-      info
+      info,
     })
   }
-  
+
   // Call custom error handler if provided
   if (props.onError) {
     props.onError(err)
   }
-  
+
   // Prevent error propagation unless specified
   return !props.propagate
 })
@@ -149,7 +160,7 @@ const resetError = () => {
 defineExpose({
   resetError,
   hasError,
-  error
+  error,
 })
 </script>
 

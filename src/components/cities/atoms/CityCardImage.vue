@@ -20,10 +20,10 @@
       @load="handleLoad"
       loading="lazy"
     />
-    
+
     <!-- Fallback when image fails -->
-    <div 
-      v-else 
+    <div
+      v-else
       class="w-full h-full bg-muted flex items-center justify-center"
       role="img"
       :aria-label="`${alt} - Image unavailable`"
@@ -36,13 +36,13 @@
 <script setup lang="ts">
 /**
  * CityCardImage - Atom component for city image display
- * 
+ *
  * Responsibilities:
  * - Display city image with lazy loading
  * - Handle image loading errors
  * - Show fallback icon on error
  * - Apply hover transformations
- * 
+ *
  * Design Patterns:
  * - Error Handling Pattern: Graceful fallback
  * - Loading Pattern: Lazy loading support
@@ -59,7 +59,7 @@ interface CityCardImageProps {
 
 // Define props
 withDefaults(defineProps<CityCardImageProps>(), {
-  imageClasses: ''
+  imageClasses: '',
 })
 
 // Define emits

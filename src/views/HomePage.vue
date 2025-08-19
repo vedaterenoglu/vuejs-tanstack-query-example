@@ -20,7 +20,7 @@
             <p class="text-muted-foreground max-w-2xl mx-auto">
               Select your city and discover exciting events happening near you
             </p>
-            
+
             <!-- View All Events Button -->
             <div class="flex justify-center pt-2">
               <Button
@@ -29,16 +29,20 @@
                 size="lg"
                 class="group transition-all duration-200 hover:scale-105 hover:shadow-md"
               >
-                <Calendar class="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform duration-200" />
+                <Calendar
+                  class="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform duration-200"
+                />
                 View All Events
-                <span class="ml-2 text-xs opacity-70 group-hover:opacity-100 transition-opacity">
+                <span
+                  class="ml-2 text-xs opacity-70 group-hover:opacity-100 transition-opacity"
+                >
                   →
                 </span>
               </Button>
             </div>
           </div>
         </header>
-        
+
         <!-- Search Section with Error Boundary -->
         <ErrorBoundary
           fallback-title="Search unavailable"
@@ -55,20 +59,25 @@
             :on-search-change="setSearchQuery"
           />
         </ErrorBoundary>
-        
+
         <!-- Loading State -->
         <div v-if="isLoading" class="flex justify-center items-center h-64">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <div
+            class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"
+          ></div>
         </div>
-        
+
         <!-- Error State -->
         <div v-else-if="error" class="text-center text-red-500">
           <p>Failed to load cities. Please try again.</p>
-          <button @click="() => refetch()" class="mt-4 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+          <button
+            @click="() => refetch()"
+            class="mt-4 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
+          >
             Retry
           </button>
         </div>
-        
+
         <!-- Cities Grid with Error Boundary -->
         <ErrorBoundary
           v-else-if="cities"
@@ -76,7 +85,7 @@
           fallback-message="There was an error loading the city grid. Please refresh the page."
           :show-reset="true"
         >
-          <CityGrid 
+          <CityGrid
             :cities="filteredCities"
             :is-search-active="!!searchQuery"
             :search-query="searchQuery"
@@ -91,10 +100,10 @@
 <script setup lang="ts">
 /**
  * HomePage - City selection landing page with search
- * 
+ *
  * Displays searchable cities grid with navigation to city-specific events.
  * Matches React HomePage with header, search, and filtering functionality.
- * 
+ *
  * Design Patterns:
  * - Container Pattern: Orchestrates data fetching and UI state
  * - Composition Pattern: Header + Search + Cities Grid
@@ -124,12 +133,13 @@ const searchQuery = ref('')
 const filteredCities = computed(() => {
   if (!cities.value) return []
   if (!searchQuery.value.trim()) return cities.value
-  
+
   const query = searchQuery.value.toLowerCase()
-  return cities.value.filter(city =>
-    city.city?.toLowerCase().includes(query) ||
-    city.citySlug?.toLowerCase().includes(query) ||
-    city.alt?.toLowerCase().includes(query)
+  return cities.value.filter(
+    city =>
+      city.city?.toLowerCase().includes(query) ||
+      city.citySlug?.toLowerCase().includes(query) ||
+      city.alt?.toLowerCase().includes(query)
   )
 })
 

@@ -8,22 +8,22 @@
  */
 -->
 <template>
-  <div 
+  <div
     :class="[
       'event-card-header relative w-full h-full overflow-hidden',
-      className
+      className,
     ]"
   >
     <!-- Event Image -->
-    <EventImage 
+    <EventImage
       :src="imageUrl"
       :alt="alt || ''"
       :class="[
         'w-full h-full transition-transform duration-300',
-        isHovered ? 'scale-105' : ''
+        isHovered ? 'scale-105' : '',
       ]"
     />
-    
+
     <!-- Price Badge -->
     <EventBadge
       :text="formattedPrice"
@@ -36,13 +36,13 @@
 <script setup lang="ts">
 /**
  * EventCardHeader Molecule Component
- * 
+ *
  * Features:
  * - Container for image and badge atoms
  * - Maintains aspect ratio
  * - Composes EventImage and EventBadge
  * - Passes hover state for image scaling
- * 
+ *
  * Design Patterns:
  * - Container Pattern: Contains atoms
  * - Composition Pattern: Composes atoms
@@ -61,7 +61,7 @@ import { EventImage, EventBadge } from '../atoms'
 
 const props = withDefaults(defineProps<EventCardHeaderProps>(), {
   isHovered: false,
-  className: ''
+  className: '',
 })
 
 // Computed

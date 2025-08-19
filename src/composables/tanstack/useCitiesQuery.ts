@@ -5,10 +5,7 @@
  * @solid SRP (City queries only), OCP (Extensible), ISP (Focused interfaces), DIP (Depends on abstractions)
  */
 
-import {
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/vue-query'
+import { useQuery } from '@tanstack/vue-query'
 import { computed, type MaybeRef, unref } from 'vue'
 
 import { cityQueryKeys } from '@/lib/types/city.types'
@@ -17,10 +14,10 @@ import { cityApiService } from '@/services/api'
 
 /**
  * useCitiesQuery - TanStack Query composables for cities data
- * 
+ *
  * Provides useQuery, useSuspenseQuery, and useCityQuery composables for fetching
  * cities data with search capabilities and individual city details.
- * 
+ *
  * Design Patterns Applied:
  * - Composable Pattern: Encapsulates TanStack Query logic
  * - Factory Pattern: Multiple query composable variants
@@ -47,7 +44,9 @@ const fetchCityBySlug = async (citySlug: string): Promise<City | undefined> => {
 /**
  * Composable for fetching cities data
  */
-export function useCitiesQuery(options?: MaybeRef<CitySearchOptions | undefined>) {
+export function useCitiesQuery(
+  options?: MaybeRef<CitySearchOptions | undefined>
+) {
   const queryParams = computed(() => {
     const defaultOptions: CitySearchOptions = {
       query: '',
@@ -60,7 +59,9 @@ export function useCitiesQuery(options?: MaybeRef<CitySearchOptions | undefined>
 
   const queryKey = computed(() => {
     const filters = Object.fromEntries(
-      Object.entries(queryParams.value).filter(([, value]) => value !== undefined && value !== '')
+      Object.entries(queryParams.value).filter(
+        ([, value]) => value !== undefined && value !== ''
+      )
     )
     return cityQueryKeys.list(filters)
   })
@@ -83,8 +84,8 @@ export function useCitiesSearch(
   enabled: MaybeRef<boolean> = true
 ) {
   const unwrappedSearchQuery = computed(() => unref(searchQuery))
-  const isEnabled = computed(() =>
-    unref(enabled) && Boolean(unwrappedSearchQuery.value.trim())
+  const isEnabled = computed(
+    () => unref(enabled) && Boolean(unwrappedSearchQuery.value.trim())
   )
 
   const queryKey = computed(() =>
@@ -110,7 +111,9 @@ export function useCityQuery(
   enabled: MaybeRef<boolean> = true
 ) {
   const unwrappedCitySlug = computed(() => unref(citySlug))
-  const isEnabled = computed(() => unref(enabled) && Boolean(unwrappedCitySlug.value))
+  const isEnabled = computed(
+    () => unref(enabled) && Boolean(unwrappedCitySlug.value)
+  )
 
   const queryKey = computed(() => cityQueryKeys.detail(unwrappedCitySlug.value))
 
@@ -144,7 +147,9 @@ export function useCitySuspenseQuery(citySlug: MaybeRef<string>) {
  * Follows Vue 3 pattern of extracting logic into composables
  * Single Responsibility: Data transformation and computed properties
  */
-export function useCitiesWithMeta(options?: MaybeRef<CitySearchOptions | undefined>) {
+export function useCitiesWithMeta(
+  options?: MaybeRef<CitySearchOptions | undefined>
+) {
   const citiesQuery = useCitiesQuery(options)
 
   const computedData = computed(() => {
@@ -162,17 +167,20 @@ export function useCitiesWithMeta(options?: MaybeRef<CitySearchOptions | undefin
     const totalCount = cities.length
 
     // Group cities by first letter for enhanced navigation
-    const citiesByFirstLetter = cities.reduce((acc: Map<string, City[]>, city: City) => {
-      const firstLetter = city.city.charAt(0).toUpperCase()
-      if (!acc.has(firstLetter)) {
-        acc.set(firstLetter, [])
-      }
-      const letterCities = acc.get(firstLetter)
-      if (letterCities) {
-        letterCities.push(city)
-      }
-      return acc
-    }, new Map<string, City[]>())
+    const citiesByFirstLetter = cities.reduce(
+      (acc: Map<string, City[]>, city: City) => {
+        const firstLetter = city.city.charAt(0).toUpperCase()
+        if (!acc.has(firstLetter)) {
+          acc.set(firstLetter, [])
+        }
+        const letterCities = acc.get(firstLetter)
+        if (letterCities) {
+          letterCities.push(city)
+        }
+        return acc
+      },
+      new Map<string, City[]>()
+    )
 
     // Sort cities by name for popular cities (could be extended with analytics)
     const popularCities = [...cities]
@@ -204,9 +212,14 @@ export function useCityExists(
   enabled: MaybeRef<boolean> = true
 ) {
   const unwrappedCitySlug = computed(() => unref(citySlug))
-  const isEnabled = computed(() => unref(enabled) && Boolean(unwrappedCitySlug.value))
+  const isEnabled = computed(
+    () => unref(enabled) && Boolean(unwrappedCitySlug.value)
+  )
 
-  const queryKey = computed(() => [...cityQueryKeys.detail(unwrappedCitySlug.value), 'exists'])
+  const queryKey = computed(() => [
+    ...cityQueryKeys.detail(unwrappedCitySlug.value),
+    'exists',
+  ])
 
   return useQuery({
     queryKey,
@@ -240,10 +253,17 @@ export function useCityValidation() {
         return { isValid: false, error: 'City slug is required' }
       }
       if (slug.length > 50) {
-        return { isValid: false, error: 'City slug too long (max 50 characters)' }
+        return {
+          isValid: false,
+          error: 'City slug too long (max 50 characters)',
+        }
       }
       if (!/^[a-z0-9-]+$/.test(slug)) {
-        return { isValid: false, error: 'City slug must contain only lowercase letters, numbers, and hyphens' }
+        return {
+          isValid: false,
+          error:
+            'City slug must contain only lowercase letters, numbers, and hyphens',
+        }
       }
       return { isValid: true }
     },
@@ -276,7 +296,10 @@ export function useCitiesFilter() {
      * Sort cities by various criteria
      * Implements multiple sorting strategies
      */
-    sortCities: (cities: City[], sortBy: 'name' | 'slug' | 'created' = 'name'): City[] => {
+    sortCities: (
+      cities: City[],
+      sortBy: 'name' | 'slug' | 'created' = 'name'
+    ): City[] => {
       return [...cities].sort((a, b) => {
         switch (sortBy) {
           case 'name':
@@ -285,7 +308,9 @@ export function useCitiesFilter() {
             return a.citySlug.localeCompare(b.citySlug)
           case 'created':
             if (!a.createdAt || !b.createdAt) return 0
-            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            return (
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            )
           default:
             return 0
         }
@@ -320,8 +345,14 @@ export function useCitiesFilter() {
 export function useCityOperations(citySlug?: MaybeRef<string | undefined>) {
   const citiesQuery = useCitiesQuery()
   const unwrappedCitySlug = computed(() => unref(citySlug) || '')
-  const cityQuery = useCityQuery(unwrappedCitySlug, computed(() => Boolean(unwrappedCitySlug.value)))
-  const cityExists = useCityExists(unwrappedCitySlug, computed(() => Boolean(unwrappedCitySlug.value)))
+  const cityQuery = useCityQuery(
+    unwrappedCitySlug,
+    computed(() => Boolean(unwrappedCitySlug.value))
+  )
+  const cityExists = useCityExists(
+    unwrappedCitySlug,
+    computed(() => Boolean(unwrappedCitySlug.value))
+  )
   const validation = useCityValidation()
   const filter = useCitiesFilter()
 
@@ -336,18 +367,26 @@ export function useCityOperations(citySlug?: MaybeRef<string | undefined>) {
     filter,
 
     // Combined loading state
-    isLoading: computed(() =>
-      citiesQuery.isLoading.value || cityQuery.isLoading.value || cityExists.isLoading.value
+    isLoading: computed(
+      () =>
+        citiesQuery.isLoading.value ||
+        cityQuery.isLoading.value ||
+        cityExists.isLoading.value
     ),
 
     // Combined error state
-    error: computed(() =>
-      citiesQuery.error.value || cityQuery.error.value || cityExists.error.value
+    error: computed(
+      () =>
+        citiesQuery.error.value ||
+        cityQuery.error.value ||
+        cityExists.error.value
     ),
 
     // Helper methods
     getCityBySlug: (slug: string) => {
-      return citiesQuery.data.value?.find((city: City) => city.citySlug === slug)
+      return citiesQuery.data.value?.find(
+        (city: City) => city.citySlug === slug
+      )
     },
 
     searchCities: (query: string) => {

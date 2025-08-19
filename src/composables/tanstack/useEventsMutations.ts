@@ -18,11 +18,11 @@ import { eventApiService } from '@/services/api'
 
 /**
  * useEventsMutations - TanStack Query mutation composables for events CRUD operations
- * 
+ *
  * Provides mutation composables for creating, updating, and deleting events with
  * optimistic updates, proper error handling, and automatic cache invalidation.
  * Implements consistent patterns for all event mutation operations.
- * 
+ *
  * Design Patterns Applied:
  * - Composable Pattern: Encapsulates mutation logic for reuse across components
  * - Optimistic Updates Pattern: Immediate UI updates with rollback on failure
@@ -110,10 +110,7 @@ export function useCreateEvent() {
     // On error: Rollback optimistic update
     onError: (_error, _variables, context) => {
       if (context?.previousEvents) {
-        queryClient.setQueryData(
-          eventQueryKeys.list(),
-          context.previousEvents
-        )
+        queryClient.setQueryData(eventQueryKeys.list(), context.previousEvents)
       }
     },
 
@@ -142,7 +139,9 @@ export function useUpdateEvent() {
       await queryClient.cancelQueries({ queryKey: eventQueryKeys.all })
 
       // Snapshot previous values for rollback
-      const previousEvent = queryClient.getQueryData(eventQueryKeys.detail(slug))
+      const previousEvent = queryClient.getQueryData(
+        eventQueryKeys.detail(slug)
+      )
       const previousEventsList = queryClient.getQueryData(eventQueryKeys.list())
 
       // Optimistically update single event cache
@@ -212,7 +211,10 @@ export function useUpdateEvent() {
     // On error: Rollback optimistic updates
     onError: (_error, { slug }, context) => {
       if (context?.previousEvent) {
-        queryClient.setQueryData(eventQueryKeys.detail(slug), context.previousEvent)
+        queryClient.setQueryData(
+          eventQueryKeys.detail(slug),
+          context.previousEvent
+        )
       }
       if (context?.previousEventsList) {
         queryClient.setQueryData(
@@ -225,7 +227,9 @@ export function useUpdateEvent() {
     // Always run after mutation
     onSettled: async (_data, _error, { slug }) => {
       // Ensure specific event is up to date
-      await queryClient.invalidateQueries({ queryKey: eventQueryKeys.detail(slug) })
+      await queryClient.invalidateQueries({
+        queryKey: eventQueryKeys.detail(slug),
+      })
       await queryClient.invalidateQueries({ queryKey: eventQueryKeys.all })
     },
   })
@@ -248,7 +252,9 @@ export function useDeleteEvent() {
       await queryClient.cancelQueries({ queryKey: eventQueryKeys.all })
 
       // Snapshot previous values for rollback
-      const previousEvent = queryClient.getQueryData(eventQueryKeys.detail(slug))
+      const previousEvent = queryClient.getQueryData(
+        eventQueryKeys.detail(slug)
+      )
       const previousEventsList = queryClient.getQueryData(eventQueryKeys.list())
 
       // Optimistically remove from cache
@@ -292,7 +298,10 @@ export function useDeleteEvent() {
     // On error: Restore optimistic updates
     onError: (_error, slug, context) => {
       if (context?.previousEvent) {
-        queryClient.setQueryData(eventQueryKeys.detail(slug), context.previousEvent)
+        queryClient.setQueryData(
+          eventQueryKeys.detail(slug),
+          context.previousEvent
+        )
       }
       if (context?.previousEventsList) {
         queryClient.setQueryData(
@@ -348,15 +357,19 @@ export function useEventMutations() {
     deleteEvent: deleteEventHandler,
 
     // Combined loading state
-    isLoading: computed(() =>
-      createMutation.isPending.value ||
-      updateMutation.isPending.value ||
-      deleteMutation.isPending.value
+    isLoading: computed(
+      () =>
+        createMutation.isPending.value ||
+        updateMutation.isPending.value ||
+        deleteMutation.isPending.value
     ),
 
     // Combined error state
-    error: computed(() =>
-      createMutation.error.value || updateMutation.error.value || deleteMutation.error.value
+    error: computed(
+      () =>
+        createMutation.error.value ||
+        updateMutation.error.value ||
+        deleteMutation.error.value
     ),
 
     // Reset all mutations

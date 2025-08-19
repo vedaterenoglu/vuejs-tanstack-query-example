@@ -132,10 +132,12 @@ export class EventApiService {
 
       // Check if response is wrapped or direct event object
       const responseData = response.data
-      
+
       // If the response is already an event object (not wrapped), wrap it
-      const dataToValidate = 
-        responseData && typeof responseData === 'object' && 'success' in responseData
+      const dataToValidate =
+        responseData &&
+        typeof responseData === 'object' &&
+        'success' in responseData
           ? responseData
           : { success: true, data: responseData }
 

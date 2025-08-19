@@ -46,27 +46,29 @@ async function fetchEvents(params?: {
   sortOrder?: 'asc' | 'desc'
 }): Promise<EventsResponse> {
   const baseUrl = import.meta.env.VITE_API_BASE_URL
-  
+
   if (!baseUrl) {
-    throw new Error('API base URL is not configured. Please check your environment variables.')
+    throw new Error(
+      'API base URL is not configured. Please check your environment variables.'
+    )
   }
-  
+
   const queryParams = new URLSearchParams()
-  
+
   if (params?.limit) queryParams.append('limit', params.limit.toString())
   if (params?.offset) queryParams.append('offset', params.offset.toString())
   if (params?.search) queryParams.append('search', params.search)
   if (params?.orderBy) queryParams.append('orderBy', params.orderBy)
   if (params?.sortOrder) queryParams.append('sortOrder', params.sortOrder)
-  
+
   const url = `${baseUrl}/api/events${queryParams.toString() ? '?' + queryParams.toString() : ''}`
-  
+
   const response = await fetch(url)
-  
+
   if (!response.ok) {
     throw new Error(`Failed to fetch events: ${response.statusText}`)
   }
-  
+
   const data = await response.json()
   console.warn('[fetchEvents] API URL:', url)
   console.warn('[fetchEvents] API response:', data)
@@ -87,29 +89,29 @@ async function fetchPaginatedEvents(params: {
 }): Promise<EventsResponse> {
   // Convert page to offset (client-side pagination)
   const offset = (params.page - 1) * params.limit
-  
+
   // Map sortBy values to backend expected values
   const orderBy = params.sortBy === 'price' ? 'name' : params.sortBy || 'date'
-  
+
   return fetchEvents({
     limit: params.limit,
     offset,
     search: params.search,
     orderBy,
-    sortOrder: params.order
+    sortOrder: params.order,
   })
 }
 
 /**
  * Composable for fetching and managing events data
- * 
+ *
  * Features:
  * - TanStack Query integration
  * - Pagination support
  * - City filtering
  * - Error handling
  * - Loading states
- * 
+ *
  * Design Patterns:
  * - Repository Pattern: Abstracts data access
  * - Observer Pattern: Reactive data updates
@@ -121,7 +123,7 @@ export function useEvents(params?: {
   enabled?: boolean
 }) {
   const queryKey = ['events', params?.limit, params?.offset, params?.search]
-  
+
   const query = useQuery({
     queryKey,
     queryFn: () => fetchEvents(params),
@@ -129,23 +131,23 @@ export function useEvents(params?: {
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   })
-  
+
   // Computed properties for easier access
   const events = computed(() => query.data.value?.events || [])
   const pagination = computed(() => query.data.value?.pagination)
-  
+
   return {
     // Data
     events,
     pagination,
     data: query.data,
-    
+
     // Query states
     isLoading: query.isLoading,
     isFetching: query.isFetching,
     isError: query.isError,
     error: query.error,
-    
+
     // Actions
     refetch: query.refetch,
   }
@@ -153,13 +155,13 @@ export function useEvents(params?: {
 
 /**
  * Composable for infinite scroll events fetching
- * 
+ *
  * Features:
  * - TanStack infinite query integration
  * - Client-side pagination (converts page to offset)
  * - Automatic page fetching
  * - Flattened events list
- * 
+ *
  * @param baseParams - Base query parameters
  * @param itemsPerPage - Number of items per page (default: 18)
  * @returns Infinite query with flattened events
@@ -172,8 +174,13 @@ export function useInfiniteEvents(
   }> = {},
   itemsPerPage = 18
 ) {
-  const queryKey = computed(() => ['events', 'infinite', unref(baseParams), itemsPerPage])
-  
+  const queryKey = computed(() => [
+    'events',
+    'infinite',
+    unref(baseParams),
+    itemsPerPage,
+  ])
+
   const query = useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam = 1 }) => {
@@ -183,58 +190,61 @@ export function useInfiniteEvents(
         limit: itemsPerPage,
         search: params.search,
         sortBy: params.sortBy || 'date',
-        order: params.order || 'asc'
+        order: params.order || 'asc',
       })
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage.pagination) return undefined
-      
+
       const { hasMore } = lastPage.pagination
       const currentPage = allPages.length
-      
+
       return hasMore ? currentPage + 1 : undefined
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   })
-  
+
   // Computed properties for easier access
   const events = computed(() => {
     console.warn('[useInfiniteEvents] query.data.value:', query.data.value)
-    console.warn('[useInfiniteEvents] query.data.value?.pages:', query.data.value?.pages)
+    console.warn(
+      '[useInfiniteEvents] query.data.value?.pages:',
+      query.data.value?.pages
+    )
     const result = query.data.value?.pages?.flatMap(page => page.events) || []
     console.warn('[useInfiniteEvents] computed events result:', result)
     console.warn('[useInfiniteEvents] computed events length:', result.length)
     return result
   })
-  
+
   const totalCount = computed(() => {
     const firstPage = query.data.value?.pages[0]
     return firstPage?.count || 0
   })
-  
+
   return {
     // Data
     events,
     totalCount,
     data: query.data,
-    
+
     // Query states
     isLoading: query.isLoading,
     isFetching: query.isFetching,
     isError: query.isError,
     error: query.error,
-    
+
     // Infinite query specific
     fetchNextPage: query.fetchNextPage,
     hasNextPage: query.hasNextPage,
     isFetchingNextPage: query.isFetchingNextPage,
-    
+
     // Actions
     refetch: query.refetch,
-    
+
     // Raw query for infinite scroll hook
-    query
+    query,
   }
 }

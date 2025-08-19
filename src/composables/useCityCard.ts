@@ -20,7 +20,7 @@ export interface UseCityCardReturn {
   isSelected: ComputedRef<boolean>
   showButton: ComputedRef<boolean>
   isLoading: Ref<boolean>
-  
+
   // Actions
   handleSelectClick: () => void
   handleMouseEnter: () => void
@@ -43,40 +43,42 @@ export interface UseCityCardOptions {
 
 /**
  * Composable for CityCard business logic
- * 
+ *
  * Extracts all stateful logic from CityCard component:
  * - Hover state management
  * - Image loading/error handling
  * - Selection state and actions
  * - Event handling coordination
- * 
+ *
  * @param options - Configuration options
  * @returns CityCard state and actions
  */
 export function useCityCard(options: UseCityCardOptions): UseCityCardReturn {
-  const { 
-    city, 
-    showSelectButton = true, 
+  const {
+    city,
+    showSelectButton = true,
     disabled = false,
     onSelect,
-    onClick
+    onClick,
   } = options
-  
+
   // Integration with city selection composable
   const { selectedCity, selectCity, isLoading } = useCitySelection()
-  
+
   // Local state
   const isHovered = ref(false)
   const imageError = ref(false)
-  
+
   // Computed properties
-  const isSelected = computed(() => selectedCity.value?.citySlug === city.citySlug)
+  const isSelected = computed(
+    () => selectedCity.value?.citySlug === city.citySlug
+  )
   const showButton = computed(() => showSelectButton && isHovered.value)
-  
+
   // Event handlers
   const handleSelectClick = () => {
     if (disabled || isLoading.value) return
-    
+
     try {
       void selectCity(city.citySlug)
       onSelect?.(city)
@@ -84,31 +86,31 @@ export function useCityCard(options: UseCityCardOptions): UseCityCardReturn {
       console.error('Failed to select city:', error)
     }
   }
-  
+
   const handleMouseEnter = () => {
     if (!disabled) {
       isHovered.value = true
     }
   }
-  
+
   const handleMouseLeave = () => {
     isHovered.value = false
   }
-  
+
   const handleImageError = () => {
     imageError.value = true
   }
-  
+
   const handleImageLoad = () => {
     imageError.value = false
   }
-  
+
   const handleClick = () => {
     if (onClick) {
       onClick(city)
     }
   }
-  
+
   return {
     // State
     isHovered,
@@ -116,13 +118,13 @@ export function useCityCard(options: UseCityCardOptions): UseCityCardReturn {
     isSelected,
     showButton,
     isLoading,
-    
+
     // Actions
     handleSelectClick,
     handleMouseEnter,
     handleMouseLeave,
     handleImageError,
     handleImageLoad,
-    handleClick
+    handleClick,
   }
 }

@@ -37,10 +37,10 @@ export interface HttpError {
 
 /**
  * HTTP client interface
- * 
+ *
  * Defines contract for HTTP client implementations.
  * Follows Interface Segregation Principle with focused methods.
- * 
+ *
  * Design Patterns:
  * - Adapter Pattern: Allows different HTTP implementations
  * - Generic Pattern: Type-safe responses
@@ -50,19 +50,19 @@ export interface HttpClient {
     url: string,
     config?: Omit<HttpRequestConfig, 'method'>
   ): Promise<HttpResponse<T>>
-  
+
   post<T>(
     url: string,
     data?: unknown,
     config?: Omit<HttpRequestConfig, 'method' | 'body'>
   ): Promise<HttpResponse<T>>
-  
+
   put<T>(
     url: string,
     data?: unknown,
     config?: Omit<HttpRequestConfig, 'method' | 'body'>
   ): Promise<HttpResponse<T>>
-  
+
   delete<T>(
     url: string,
     config?: Omit<HttpRequestConfig, 'method'>

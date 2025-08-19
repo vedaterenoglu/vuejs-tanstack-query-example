@@ -172,14 +172,15 @@ export const transformCityToDisplay = (city: City): CityDisplay => {
 export const cityQueryKeys = {
   all: ['cities'] as const,
   lists: () => [...cityQueryKeys.all, 'list'] as const,
-  list: (filters?: CitySearchOptions) => [...cityQueryKeys.lists(), filters] as const,
+  list: (filters?: CitySearchOptions) =>
+    [...cityQueryKeys.lists(), filters] as const,
   details: () => [...cityQueryKeys.all, 'detail'] as const,
   detail: (slug: string) => [...cityQueryKeys.details(), slug] as const,
   search: (query: string) => [...cityQueryKeys.all, 'search', query] as const,
 } as const
 
 // Query Key Types for type safety
-export type CityQueryKey = 
+export type CityQueryKey =
   | typeof cityQueryKeys.all
   | ReturnType<typeof cityQueryKeys.lists>
   | ReturnType<typeof cityQueryKeys.list>
