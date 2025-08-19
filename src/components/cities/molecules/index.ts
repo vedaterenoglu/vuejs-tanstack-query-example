@@ -6,4 +6,6 @@
  */
 
 // City molecule components
+export { default as CityCard } from './CityCard.vue'
 export { default as CityCardOverlay } from './CityCardOverlay.vue'
+export { default as CityGridHeader } from './CityGridHeader.vue'

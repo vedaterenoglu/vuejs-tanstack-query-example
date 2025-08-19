@@ -8,11 +8,6 @@
 // Theme composable
 export { useTheme } from './useTheme'
 
-// City composables
-export { useCities } from './useCities'
-export { useCityCard } from './useCityCard'
-export { useCitySelection } from './useCitySelection'
-
 // Event composables
 export { useEvents, useInfiniteEvents } from './useEvents'
 

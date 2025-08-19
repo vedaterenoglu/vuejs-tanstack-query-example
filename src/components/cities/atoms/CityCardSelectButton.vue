@@ -18,8 +18,7 @@
       :disabled="disabled || isLoading"
       variant="ghost"
       size="sm"
-      class="shadow-lg backdrop-blur-sm min-h-[44px] min-w-[88px] bg-black/60 text-white hover:bg-black/70 hover:text-green-500 transform transition-all duration-200"
-      :class="{ 'hover:scale-110': isHovered }"
+      :class="`shadow-lg backdrop-blur-sm min-h-[44px] min-w-[88px] bg-black/60 text-white hover:bg-black/70 hover:text-green-500 transform transition-all duration-200 ${isHovered ? 'hover:scale-110' : ''}`"
       :aria-label="ariaLabel"
     >
       <div

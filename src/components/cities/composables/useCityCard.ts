@@ -7,8 +7,10 @@
 
 import { ref, computed, type Ref, type ComputedRef } from 'vue'
 
-import { useCitySelection } from '@/composables/useCitySelection'
 import type { City } from '@/lib/types'
+
+import { useCityNavigation } from './useCityNavigation'
+import { useCitySelection } from './useCitySelection'
 
 /**
  * CityCard composable interface
@@ -62,6 +64,9 @@ export function useCityCard(options: UseCityCardOptions): UseCityCardReturn {
     onClick,
   } = options
 
+  // Navigation composable
+  const { navigateToCity } = useCityNavigation()
+  
   // Integration with city selection composable
   const { selectedCity, selectCity, isLoading } = useCitySelection()
 
@@ -77,9 +82,16 @@ export function useCityCard(options: UseCityCardOptions): UseCityCardReturn {
 
   // Event handlers
   const handleSelectClick = () => {
-    if (disabled || isLoading.value) return
+    if (disabled || isLoading.value) {
+      return
+    }
 
     try {
+      // Navigate to events page with citySlug as search parameter
+      // This matches React: navigate(`/events?search=${encodeURIComponent(city.citySlug)}`)
+      navigateToCity(city.citySlug)
+      
+      // Also update selection state
       void selectCity(city.citySlug)
       onSelect?.(city)
     } catch (error) {

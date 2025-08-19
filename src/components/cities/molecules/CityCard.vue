@@ -16,7 +16,7 @@
     ]"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
-    @click="handleClick"
+    @click="handleSelectClick"
     :aria-label="`City destination: ${city.city}`"
   >
     <!-- Image Component -->
@@ -38,7 +38,7 @@
       :variant="variant"
     />
 
-    <!-- Select Button Component -->
+    <!-- Select Button Component (visual only, no click handler) -->
     <CityCardSelectButton
       :show-button="showSelectButton"
       :is-visible="showButton"
@@ -47,7 +47,6 @@
       :disabled="disabled"
       :is-selected="isSelected"
       :city-name="city.city"
-      @click="handleSelectClick"
     />
   </article>
 </template>
@@ -67,11 +66,12 @@
  * - Composition Pattern: Composes from smaller units
  * - Delegation Pattern: Delegates logic to composable
  */
-import { useCityCard } from '@/composables/useCityCard'
 import type { City } from '@/lib/types'
 
-import { CityCardImage, CityCardSelectButton } from './atoms'
-import { CityCardOverlay } from './molecules'
+import { CityCardImage, CityCardSelectButton } from '../atoms'
+import { useCityCard } from '../composables'
+
+import { CityCardOverlay } from './'
 
 // Props interface
 interface CityCardProps {
@@ -107,7 +107,6 @@ const {
   handleMouseLeave,
   handleImageError,
   handleImageLoad,
-  handleClick: composableHandleClick,
 } = useCityCard({
   city: props.city,
   showSelectButton: props.showSelectButton,
@@ -118,10 +117,6 @@ const {
   },
 })
 
-// Wrapper to emit event
-const handleClick = () => {
-  composableHandleClick()
-}
 </script>
 
 <style scoped>

@@ -115,10 +115,10 @@ import { useRouter } from 'vue-router'
 
 import { ErrorBoundary } from '@/components/boundaries'
 import { CityGrid } from '@/components/cities'
+import { useCities } from '@/components/cities/composables'
 import Layout from '@/components/layout/Layout.vue'
 import { SearchSection } from '@/components/sections'
 import { Button } from '@/components/ui/button'
-import { useCities } from '@/composables/useCities'
 
 // Router for navigation
 const router = useRouter()
