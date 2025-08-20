@@ -15,6 +15,9 @@
   },
   "homepage": "https://vuejs-tanstack-query-example.demo.vedaterenoglu.com",
   "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
