@@ -1,8 +1,20 @@
 {
   "name": "vuejs-tanstack-query-example",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vedaterenoglu/vuejs-tanstack-query-example.git"
+  },
+  "author": {
+    "name": "Vedat Erenoglu",
+    "email": "info@vedaterenoglu.com",
+    "url": "https://vedaterenoglu.com",
+    "linkedin": "https://www.linkedin.com/in/vedaterenoglu/"
+  },
+  "homepage": "https://vuejs-tanstack-query-example.demo.vedaterenoglu.com",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
