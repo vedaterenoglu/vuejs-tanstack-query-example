@@ -23,17 +23,21 @@
 
       <!-- Right Column: EventInfo sidebar (1/3 width) -->
       <div class="md:col-span-1">
-        <EventInfo :event="event" />
+        <EventInfo 
+          :event="event"
+          @purchase="handlePurchaseClick"
+        />
       </div>
     </div>
 
-    <!-- TestPaymentModal Component -->
-    <TestPaymentModal
-      :isOpen="showPaymentModal"
-      :eventName="event.name"
+    <!-- EnhancedPaymentModal Component -->
+    <EnhancedPaymentModal
+      :is-open="showPaymentModal"
+      :event-name="event.name"
       :quantity="ticketQuantity"
-      :totalAmount="ticketQuantity * event.price"
-      @close="showPaymentModal = false"
+      :total-amount="ticketQuantity * event.price"
+      :is-processing="isProcessingPayment"
+      @close="handleModalClose"
       @confirm="handlePaymentConfirm"
     />
   </div>
@@ -47,6 +51,7 @@
  * - Container for all event page components
  * - Max width constraint of 900px
  * - Orchestrates sub-components
+ * - Integrates payment with server-side validation
  *
  * Design Patterns:
  * - Container Pattern: Manages all event components
@@ -56,31 +61,76 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import type { Event } from '@/components/events/types'
+import { getAppUrl } from '@/lib/config/env'
+import { processPayment, validatePaymentRequest } from '@/services/payment/paymentService'
 
 import BackNavigation from '../atoms/BackNavigation.vue'
+import EnhancedPaymentModal from '../organisms/EnhancedPaymentModal.vue'
 import EventDetails from '../organisms/EventDetails.vue'
 import EventHero from '../organisms/EventHero.vue'
 import EventInfo from '../organisms/EventInfo.vue'
-import TestPaymentModal from '../organisms/TestPaymentModal.vue'
 
 interface EventContainerProps {
   event: Event
 }
 
-defineProps<EventContainerProps>()
+const props = defineProps<EventContainerProps>()
 
 const router = useRouter()
 const showPaymentModal = ref(false)
-const ticketQuantity = ref(0)
+const ticketQuantity = ref(1)
+const isProcessingPayment = ref(false)
+const paymentError = ref<string | null>(null)
 
 const handleBackClick = () => {
   router.back()
 }
 
-const handlePaymentConfirm = () => {
-  // Payment logic will be handled by composables later
-  // console.log('Payment confirmed for', ticketQuantity.value, 'tickets')
-  showPaymentModal.value = false
+const handlePurchaseClick = (quantity: number) => {
+  ticketQuantity.value = quantity
+  showPaymentModal.value = true
+  paymentError.value = null
+}
+
+const handleModalClose = () => {
+  if (!isProcessingPayment.value) {
+    showPaymentModal.value = false
+    paymentError.value = null
+  }
+}
+
+const handlePaymentConfirm = async () => {
+  try {
+    isProcessingPayment.value = true
+    paymentError.value = null
+
+    // Validate payment request
+    const paymentRequest = validatePaymentRequest({
+      eventSlug: props.event.slug,
+      quantity: ticketQuantity.value,
+      successUrl: getAppUrl(`/payment/success?event=${props.event.slug}`),
+      cancelUrl: getAppUrl(`/payment/cancel?event=${props.event.slug}`),
+    })
+
+    // Process payment with server-side validation
+    // Server will fetch fresh price to prevent manipulation
+    const response = await processPayment(paymentRequest)
+
+    // Redirect to Stripe checkout
+    if (response.checkoutUrl) {
+      window.location.href = response.checkoutUrl
+    }
+  } catch (error) {
+    // Handle errors
+    if (error && typeof error === 'object' && 'message' in error) {
+      paymentError.value = error.message as string
+    } else {
+      paymentError.value = 'Payment processing failed. Please try again.'
+    }
+    // Keep modal open on error for retry
+  } finally {
+    isProcessingPayment.value = false
+  }
 }
 </script>
 

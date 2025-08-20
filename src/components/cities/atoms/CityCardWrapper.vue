@@ -35,8 +35,6 @@
  * - SRP: Only handles wrapper element
  * - OCP: Open for extension via slots
  */
-import { onMounted } from 'vue'
-
 interface CityCardWrapperProps {
   isSelected?: boolean
   disabled?: boolean
@@ -56,12 +54,7 @@ const emit = defineEmits<{
   click: []
 }>()
 
-const handleClick = (event: MouseEvent) => {
-  console.log('CityCardWrapper clicked!', event)
+const handleClick = () => {
   emit('click')
 }
-
-onMounted(() => {
-  console.log('CityCardWrapper mounted with click handler')
-})
 </script>

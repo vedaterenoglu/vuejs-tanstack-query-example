@@ -105,28 +105,28 @@ export function useFocusManagement(
       case 'ArrowDown':
       case 'ArrowRight':
         event.preventDefault()
-        focusNext()
+        void focusNext()
         break
       case 'ArrowUp':
       case 'ArrowLeft':
         event.preventDefault()
-        focusPrevious()
+        void focusPrevious()
         break
       case 'Home':
         event.preventDefault()
-        focusFirst()
+        void focusFirst()
         break
       case 'End':
         event.preventDefault()
-        focusLast()
+        void focusLast()
         break
       case 'Tab':
         if (shouldTrapFocus && containerRef?.value) {
           event.preventDefault()
           if (event.shiftKey) {
-            focusPrevious()
+            void focusPrevious()
           } else {
-            focusNext()
+            void focusNext()
           }
         }
         break
@@ -137,7 +137,7 @@ export function useFocusManagement(
   const trapFocus = (container: HTMLElement) => {
     const handleFocusIn = (event: FocusEvent) => {
       if (!container.contains(event.target as Node)) {
-        focusFirst()
+        void focusFirst()
       }
     }
 
@@ -159,7 +159,7 @@ export function useFocusManagement(
     updateFocusableElements()
     
     if (autoFocus) {
-      focusFirst()
+      void focusFirst()
     }
     
     if (shouldTrapFocus && containerRef?.value) {

@@ -12,12 +12,10 @@
 
 <script setup lang="ts">
 const handleClick = () => {
-  console.log('BUTTON CLICKED!')
   alert('Button was clicked!')
 }
 
 const handleDivClick = () => {
-  console.log('DIV CLICKED!')
   alert('Div was clicked!')
 }
 </script>

@@ -8,10 +8,10 @@
 /**
  * Memoization options
  */
-export interface MemoizeOptions {
+export interface MemoizeOptions<TArgs extends unknown[] = unknown[]> {
   maxSize?: number
   ttl?: number
-  keyResolver?: (...args: any[]) => string
+  keyResolver?: (...args: TArgs) => string
 }
 
 /**
@@ -29,19 +29,19 @@ interface CacheEntry<T> {
  * @param options - Memoization options
  * @returns Memoized function
  */
-export function memoize<T extends (...args: any[]) => any>(
-  fn: T,
-  options: MemoizeOptions = {}
-): T & { clear: () => void } {
+export function memoize<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => TReturn,
+  options: MemoizeOptions<TArgs> = {}
+): ((...args: TArgs) => TReturn) & { clear: () => void } {
   const {
     maxSize = 10,
     ttl = 0,
     keyResolver = (...args) => JSON.stringify(args),
   } = options
 
-  const cache = new Map<string, CacheEntry<ReturnType<T>>>()
+  const cache = new Map<string, CacheEntry<TReturn>>()
 
-  const memoized = ((...args: Parameters<T>) => {
+  const memoized = ((...args: TArgs) => {
     const key = keyResolver(...args)
     const cached = cache.get(key)
 
@@ -70,12 +70,13 @@ export function memoize<T extends (...args: any[]) => any>(
     }
 
     return value
-  }) as T
+  }) as (...args: TArgs) => TReturn
 
   // Add clear method
-  ;(memoized as any).clear = () => cache.clear()
+  const memoizedWithClear = memoized as ((...args: TArgs) => TReturn) & { clear: () => void }
+  memoizedWithClear.clear = () => cache.clear()
 
-  return memoized as T & { clear: () => void }
+  return memoizedWithClear
 }
 
 /**
@@ -84,12 +85,12 @@ export function memoize<T extends (...args: any[]) => any>(
  * @param fn - Function to memoize
  * @returns Memoized function
  */
-export function weakMemoize<T extends (arg: object) => any>(
-  fn: T
-): T & { clear: () => void } {
-  const cache = new WeakMap<object, ReturnType<T>>()
+export function weakMemoize<TArg extends object, TReturn>(
+  fn: (arg: TArg) => TReturn
+): ((arg: TArg) => TReturn) & { clear: () => void } {
+  const cache = new WeakMap<TArg, TReturn>()
 
-  const memoized = ((arg: Parameters<T>[0]) => {
+  const memoized = (arg: TArg) => {
     if (cache.has(arg)) {
       return cache.get(arg)!
     }
@@ -97,14 +98,15 @@ export function weakMemoize<T extends (arg: object) => any>(
     const value = fn(arg)
     cache.set(arg, value)
     return value
-  }) as T
+  }
 
   // WeakMap doesn't support clear, but we provide a no-op for consistency
-  ;(memoized as any).clear = () => {
+  const memoizedWithClear = memoized as ((arg: TArg) => TReturn) & { clear: () => void }
+  memoizedWithClear.clear = () => {
     // WeakMap entries are automatically garbage collected
   }
 
-  return memoized as T & { clear: () => void }
+  return memoizedWithClear
 }
 
 /**
@@ -114,19 +116,19 @@ export function weakMemoize<T extends (arg: object) => any>(
  * @param options - Memoization options
  * @returns Memoized async function
  */
-export function memoizeAsync<T extends (...args: any[]) => Promise<any>>(
-  fn: T,
-  options: MemoizeOptions = {}
-): T & { clear: () => void } {
+export function memoizeAsync<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => Promise<TReturn>,
+  options: MemoizeOptions<TArgs> = {}
+): ((...args: TArgs) => Promise<TReturn>) & { clear: () => void } {
   const {
     maxSize = 10,
     ttl = 0,
     keyResolver = (...args) => JSON.stringify(args),
   } = options
 
-  const cache = new Map<string, CacheEntry<Promise<Awaited<ReturnType<T>>>>>()
+  const cache = new Map<string, CacheEntry<Promise<TReturn>>>()
 
-  const memoized = (async (...args: Parameters<T>) => {
+  const memoized = (async (...args: TArgs) => {
     const key = keyResolver(...args)
     const cached = cache.get(key)
 
@@ -158,10 +160,11 @@ export function memoizeAsync<T extends (...args: any[]) => Promise<any>>(
     }
 
     return promise
-  }) as T
+  }) as (...args: TArgs) => Promise<TReturn>
 
   // Add clear method
-  ;(memoized as any).clear = () => cache.clear()
+  const memoizedWithClear = memoized as ((...args: TArgs) => Promise<TReturn>) & { clear: () => void }
+  memoizedWithClear.clear = () => cache.clear()
 
-  return memoized as T & { clear: () => void }
+  return memoizedWithClear
 }

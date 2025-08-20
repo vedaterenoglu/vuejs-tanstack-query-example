@@ -48,7 +48,7 @@ export function createShallowState<T>(
 export function batchUpdates(callback: () => void): void {
   // Vue 3 automatically batches updates in event handlers
   // This is a placeholder for explicit batching if needed
-  Promise.resolve().then(callback)
+  void Promise.resolve().then(callback)
 }
 
 /**
@@ -58,13 +58,13 @@ export function batchUpdates(callback: () => void): void {
  * @param delay - Delay in milliseconds
  * @returns Debounced function
  */
-export function debounce<T extends (...args: any[]) => any>(
-  fn: T,
+export function debounce<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => TReturn,
   delay: number
-): T & { cancel: () => void } {
+): ((...args: TArgs) => void) & { cancel: () => void } {
   let timeoutId: NodeJS.Timeout | null = null
 
-  const debounced = ((...args: Parameters<T>) => {
+  const debounced = ((...args: TArgs) => {
     if (timeoutId) {
       clearTimeout(timeoutId)
     }
@@ -73,17 +73,18 @@ export function debounce<T extends (...args: any[]) => any>(
       fn(...args)
       timeoutId = null
     }, delay)
-  }) as T
+  }) as (...args: TArgs) => void
 
   // Add cancel method
-  ;(debounced as any).cancel = () => {
+  const debouncedWithCancel = debounced as ((...args: TArgs) => void) & { cancel: () => void }
+  debouncedWithCancel.cancel = () => {
     if (timeoutId) {
       clearTimeout(timeoutId)
       timeoutId = null
     }
   }
 
-  return debounced as T & { cancel: () => void }
+  return debouncedWithCancel
 }
 
 /**
@@ -93,15 +94,15 @@ export function debounce<T extends (...args: any[]) => any>(
  * @param limit - Time limit in milliseconds
  * @returns Throttled function
  */
-export function throttle<T extends (...args: any[]) => any>(
-  fn: T,
+export function throttle<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => TReturn,
   limit: number
-): T & { cancel: () => void } {
+): ((...args: TArgs) => void) & { cancel: () => void } {
   let inThrottle = false
-  let lastArgs: Parameters<T> | null = null
+  let lastArgs: TArgs | null = null
   let timeoutId: NodeJS.Timeout | null = null
 
-  const throttled = ((...args: Parameters<T>) => {
+  const throttled = ((...args: TArgs) => {
     lastArgs = args
 
     if (!inThrottle) {
@@ -116,10 +117,11 @@ export function throttle<T extends (...args: any[]) => any>(
         }
       }, limit)
     }
-  }) as T
+  }) as (...args: TArgs) => void
 
   // Add cancel method
-  ;(throttled as any).cancel = () => {
+  const throttledWithCancel = throttled as ((...args: TArgs) => void) & { cancel: () => void }
+  throttledWithCancel.cancel = () => {
     if (timeoutId) {
       clearTimeout(timeoutId)
       timeoutId = null
@@ -128,7 +130,7 @@ export function throttle<T extends (...args: any[]) => any>(
     lastArgs = null
   }
 
-  return throttled as T & { cancel: () => void }
+  return throttledWithCancel
 }
 
 /**
@@ -174,7 +176,7 @@ export function measurePerformance<T>(
     performance.measure(name, startMark, endMark)
     
     const measure = performance.getEntriesByName(name)[0]
-    console.log(`[Performance] ${name}: ${measure.duration.toFixed(2)}ms`)
+    console.warn(`[Performance] ${name}: ${measure.duration.toFixed(2)}ms`)
     
     // Cleanup
     performance.clearMarks(startMark)

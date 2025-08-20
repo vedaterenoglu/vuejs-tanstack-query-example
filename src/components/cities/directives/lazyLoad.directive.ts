@@ -20,6 +20,13 @@ export interface LazyLoadOptions {
 }
 
 /**
+ * Extended HTMLImageElement with lazy load binding
+ */
+interface LazyLoadElement extends HTMLImageElement {
+  __lazyLoadBinding?: DirectiveBinding<string | LazyLoadOptions>
+}
+
+/**
  * Default placeholder image
  */
 const DEFAULT_PLACEHOLDER = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect width="400" height="300" fill="%23f3f4f6"/%3E%3C/svg%3E'
@@ -72,8 +79,8 @@ const createObserver = (options: LazyLoadOptions = {}) => {
   return new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const el = entry.target as HTMLImageElement
-        const binding = (el as any).__lazyLoadBinding
+        const el = entry.target as LazyLoadElement
+        const binding = el.__lazyLoadBinding
         if (binding) {
           loadImage(el, binding)
           observer?.unobserve(el)
@@ -90,10 +97,10 @@ const createObserver = (options: LazyLoadOptions = {}) => {
 /**
  * Lazy load directive
  */
-export const vLazyLoad: ObjectDirective<HTMLImageElement, string | LazyLoadOptions> = {
+export const vLazyLoad: ObjectDirective<LazyLoadElement, string | LazyLoadOptions> = {
   mounted(el, binding) {
     // Store binding for later use
-    ;(el as any).__lazyLoadBinding = binding
+    el.__lazyLoadBinding = binding
 
     const options = typeof binding.value === 'string' 
       ? {} 
@@ -124,12 +131,12 @@ export const vLazyLoad: ObjectDirective<HTMLImageElement, string | LazyLoadOptio
 
   updated(el, binding) {
     // Update binding reference
-    ;(el as any).__lazyLoadBinding = binding
+    el.__lazyLoadBinding = binding
   },
 
   unmounted(el) {
     observer?.unobserve(el)
-    delete (el as any).__lazyLoadBinding
+    delete el.__lazyLoadBinding
   },
 }
 

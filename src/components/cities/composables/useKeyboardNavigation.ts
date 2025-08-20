@@ -25,7 +25,6 @@ export interface KeyboardShortcut {
  */
 export interface UseKeyboardNavigationOptions {
   shortcuts?: KeyboardShortcut[]
-  enableGrid?: boolean
   containerRef?: Ref<HTMLElement | null>
   preventDefault?: boolean
 }
@@ -46,7 +45,6 @@ export interface UseKeyboardNavigationReturn {
  * 
  * Features:
  * - Custom keyboard shortcuts
- * - Grid navigation support
  * - Modifier key support
  * - Dynamic shortcut registration
  * 
@@ -58,7 +56,6 @@ export function useKeyboardNavigation(
 ): UseKeyboardNavigationReturn {
   const {
     shortcuts: initialShortcuts = [],
-    enableGrid = false,
     containerRef,
     preventDefault = true,
   } = options

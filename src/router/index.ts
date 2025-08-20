@@ -45,7 +45,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/events/:slug',
     name: 'event-detail',
-    component: () => import('@/pages/SingleEventPage.vue'),
+    component: () => import('@/views/SingleEventPage.vue'),
     meta: {
       title: 'Event Details',
       requiresAuth: false,
