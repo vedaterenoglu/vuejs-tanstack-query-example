@@ -7,8 +7,10 @@
 
 export { default as EventBadge } from './EventBadge.vue'
 export { default as EventButton } from './EventButton.vue'
+export { default as EventCardOverlay } from './EventCardOverlay.vue'
 export { default as EventDate } from './EventDate.vue'
 export { default as EventImage } from './EventImage.vue'
 export { default as EventLocation } from './EventLocation.vue'
+export { default as EventPrice } from './EventPrice.vue'
 export { default as EventTime } from './EventTime.vue'
 export { default as EventTitle } from './EventTitle.vue'

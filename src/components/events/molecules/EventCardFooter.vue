@@ -11,7 +11,7 @@
   <div
     :class="[
       'event-card-footer absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20',
-      'transition-all duration-300 ease-out',
+      'transition-all duration-300 ease-out pointer-events-none',
       isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75',
       className,
     ]"

@@ -24,10 +24,9 @@
       ]"
     />
 
-    <!-- Price Badge -->
-    <EventBadge
-      :text="formattedPrice"
-      variant="primary"
+    <!-- Price -->
+    <EventPrice
+      :price="price"
       class="absolute top-3 right-3 z-10"
     />
   </div>
@@ -47,8 +46,6 @@
  * - Container Pattern: Contains atoms
  * - Composition Pattern: Composes atoms
  */
-import { computed } from 'vue'
-
 interface EventCardHeaderProps {
   imageUrl: string
   alt?: string
@@ -57,16 +54,11 @@ interface EventCardHeaderProps {
   className?: string
 }
 
-import { EventImage, EventBadge } from '../atoms'
+import { EventImage, EventPrice } from '../atoms'
 
-const props = withDefaults(defineProps<EventCardHeaderProps>(), {
+withDefaults(defineProps<EventCardHeaderProps>(), {
   isHovered: false,
   className: '',
-})
-
-// Computed
-const formattedPrice = computed(() => {
-  return props.price === 0 ? 'Free' : `$${props.price.toFixed(2)}`
 })
 </script>
 

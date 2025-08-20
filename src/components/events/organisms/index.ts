@@ -6,4 +6,5 @@
  */
 
 export { default as EventCard } from './EventCard.vue'
+export { default as EventErrorBoundary } from './EventErrorBoundary.vue'
 export { default as EventGrid } from './EventGrid.vue'

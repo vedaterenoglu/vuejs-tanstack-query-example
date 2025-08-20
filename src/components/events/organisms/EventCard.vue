@@ -1,10 +1,10 @@
 <!--
 /**
  * @file EventCard.vue
- * @role Event card organism component - empty container for molecules
+ * @role Event card organism component
  * @atomic organism
  * @patterns Container Pattern, Composition Pattern
- * @solid SRP (Card container only), OCP (Extensible via molecules), DIP (Will depend on molecule abstractions)
+ * @solid SRP (Card orchestration), OCP (Extensible via molecules), DIP (Depends on abstractions)
  */
 -->
 <template>
@@ -12,7 +12,7 @@
     :class="[
       'event-card group relative overflow-hidden rounded-lg shadow-sm',
       'transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]',
-      'bg-muted',
+      'bg-muted w-full',
       disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
       variant === 'compact'
         ? 'aspect-[3/2] min-h-[200px]'
@@ -49,12 +49,7 @@
     />
 
     <!-- Hover Overlay -->
-    <div
-      :class="[
-        'absolute inset-0 bg-black/10 transition-opacity duration-300',
-        isHovered && !disabled ? 'opacity-100' : 'opacity-0',
-      ]"
-    />
+    <EventCardOverlay :is-visible="isHovered && !disabled" />
   </article>
 </template>
 
@@ -63,20 +58,24 @@
  * EventCard Organism Component
  *
  * Features:
- * - Container composing molecules
+ * - Orchestrates molecules and atoms
+ * - Delegates logic to composable
  * - 3:2 aspect ratio responsive card
- * - Hover animations and effects
- * - Click handling
  *
  * Design Patterns:
- * - Container Pattern: Container for molecules
- * - Composition Pattern: Composes molecules
- * - Event Handler Pattern: Mouse and click events
+ * - Container Pattern: Orchestrates components
+ * - Composition Pattern: Composes molecules/atoms
+ * - Delegation Pattern: Delegates logic to composable
+ * 
+ * SOLID Principles:
+ * - SRP: Only orchestrates card components
+ * - OCP: Open for extension via props
+ * - DIP: Depends on composable and component abstractions
  */
-import { ref } from 'vue'
-
+import EventCardOverlay from '../atoms/EventCardOverlay.vue'
+import { useEventCard } from '../composables/useEventCard'
 import { EventCardHeader, EventCardBody, EventCardFooter } from '../molecules'
-import { type EventCardProps, type Event } from '../types'
+import { type EventCardProps } from '../types'
 
 const props = withDefaults(defineProps<EventCardProps>(), {
   disabled: false,
@@ -86,35 +85,16 @@ const props = withDefaults(defineProps<EventCardProps>(), {
 })
 
 const emit = defineEmits<{
-  click: [event: Event]
+  click: [event: typeof props.event]
 }>()
 
-// State
-const isHovered = ref(false)
-
-// Event handlers
-const handleCardClick = () => {
-  if (props.disabled) return
-  if (props.onClick) {
-    props.onClick(props.event)
-  } else {
-    emit('click', props.event)
+// Use composable for card logic
+const { isHovered, handleCardClick, handleMouseEnter, handleMouseLeave } = useEventCard(
+  props.event,
+  {
+    disabled: props.disabled,
+    onClick: props.onClick,
+    onEmit: (event) => emit('click', event),
   }
-}
-
-const handleMouseEnter = () => {
-  if (!props.disabled) {
-    isHovered.value = true
-  }
-}
-
-const handleMouseLeave = () => {
-  isHovered.value = false
-}
+)
 </script>
-
-<style scoped>
-.event-card {
-  width: 100%;
-}
-</style>

@@ -14,10 +14,10 @@
       'event-button px-4 py-2 min-h-[44px] min-w-[88px] rounded-md',
       'shadow-lg backdrop-blur-sm',
       'transform transition-all duration-200',
+      'pointer-events-none',
       variantClasses,
       className,
     ]"
-    @click.stop="handleClick"
   >
     {{ label }}
   </button>
@@ -46,10 +46,6 @@ const props = withDefaults(defineProps<EventButtonProps>(), {
   className: '',
 })
 
-const emit = defineEmits<{
-  click: []
-}>()
-
 // Computed variant classes
 const variantClasses = computed(() => {
   const variants = {
@@ -59,14 +55,4 @@ const variantClasses = computed(() => {
   }
   return variants[props.variant || 'ghost']
 })
-
-// Event handler
-const handleClick = () => {
-  if (!props.disabled) {
-    if (props.onClick) {
-      props.onClick()
-    }
-    emit('click')
-  }
-}
 </script>
