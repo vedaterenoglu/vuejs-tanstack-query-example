@@ -58,11 +58,11 @@ export function useCitiesQuery(
   })
 
   const queryKey = computed(() => {
-    const filters = Object.fromEntries(
-      Object.entries(queryParams.value).filter(
-        ([, value]) => value !== undefined && value !== ''
-      )
-    )
+    const filters: CitySearchOptions = {
+      query: queryParams.value.query,
+      limit: queryParams.value.limit,
+      offset: queryParams.value.offset,
+    }
     return cityQueryKeys.list(filters)
   })
 
@@ -126,21 +126,8 @@ export function useCityQuery(
   })
 }
 
-/**
- * Suspense-enabled composable for fetching single city
- * Uses Vue 3 Suspense integration pattern
- * Interface Segregation: Focused interface for suspense consumers
- */
-export function useCitySuspenseQuery(citySlug: MaybeRef<string>) {
-  const unwrappedCitySlug = computed(() => unref(citySlug))
-  const queryKey = computed(() => cityQueryKeys.detail(unwrappedCitySlug.value))
-
-  return useSuspenseQuery({
-    queryKey,
-    queryFn: () => fetchCityBySlug(unwrappedCitySlug.value),
-    staleTime: 15 * 60 * 1000,
-  })
-}
+// Note: useSuspenseQuery not available in this version of @tanstack/vue-query
+// Removed useCitySuspenseQuery - use regular useQuery with enabled option instead
 
 /**
  * Utility composable for combining cities data with computed values

@@ -66,7 +66,9 @@ export function memoize<TArgs extends unknown[], TReturn>(
     // Enforce max size (LRU eviction)
     if (cache.size > maxSize) {
       const firstKey = cache.keys().next().value
-      cache.delete(firstKey)
+      if (firstKey !== undefined) {
+        cache.delete(firstKey)
+      }
     }
 
     return value
@@ -156,7 +158,9 @@ export function memoizeAsync<TArgs extends unknown[], TReturn>(
     // Enforce max size
     if (cache.size > maxSize) {
       const firstKey = cache.keys().next().value
-      cache.delete(firstKey)
+      if (firstKey !== undefined) {
+        cache.delete(firstKey)
+      }
     }
 
     return promise

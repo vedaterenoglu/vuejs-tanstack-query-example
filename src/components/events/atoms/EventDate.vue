@@ -49,8 +49,12 @@ const props = withDefaults(defineProps<EventDateProps>(), {
 
 // Convert date to string for datetime attribute
 const dateString = computed(() => {
-  if (typeof props.date === 'string') return props.date
-  return props.date.toISOString()
+  if (typeof props.date === 'string') {
+    // If it's already a string, try to parse it to get ISO format
+    const parsedDate = new Date(props.date)
+    return parsedDate.toISOString()
+  }
+  return props.date
 })
 
 // Format date for display

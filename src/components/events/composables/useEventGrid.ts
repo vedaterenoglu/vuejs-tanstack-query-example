@@ -35,8 +35,8 @@ export interface UseEventGridReturn {
   error: Ref<Error | null>
   
   // Infinite scroll
-  hasMore: ComputedRef<boolean>
-  isFetchingNext: ComputedRef<boolean>
+  hasMore: Ref<boolean>
+  isFetchingNext: Ref<boolean>
   sentinelRef: Ref<HTMLElement | null>
   
   // Actions

@@ -97,7 +97,7 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
     // Restore scroll position on browser back/forward
     if (savedPosition) {
       return savedPosition
@@ -118,7 +118,7 @@ const router = createRouter({
  * Global navigation guard for authentication
  * Guard Pattern - protects routes requiring authentication
  */
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   // Update document title
   const title = to.meta.title as string | undefined
   document.title = `${title || 'App'} | Vue Events`

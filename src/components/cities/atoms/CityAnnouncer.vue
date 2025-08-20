@@ -38,7 +38,7 @@ import { ref, watch, onUnmounted } from 'vue'
 export interface Announcement {
   message: string
   priority?: 'polite' | 'assertive'
-  relevant?: string
+  relevant?: 'additions' | 'additions text' | 'all' | 'removals' | 'removals additions' | 'removals text' | 'text' | 'text additions' | 'text removals'
   duration?: number
 }
 
@@ -63,7 +63,7 @@ const emit = defineEmits<{
 
 // State
 const announcements = ref<Announcement[]>([])
-const timers = new Map<number, NodeJS.Timeout>()
+const timers = new Map<number, ReturnType<typeof setTimeout>>()
 
 // Add announcement
 const addAnnouncement = (announcement: Announcement) => {

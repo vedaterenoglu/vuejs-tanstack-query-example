@@ -34,7 +34,7 @@
             {{ error.message || 'Failed to load event details' }}
           </p>
           <button
-            @click="refetch"
+            @click="() => refetch()"
             class="mt-4 px-4 py-2 bg-destructive text-destructive-foreground rounded hover:bg-destructive/90"
           >
             Try Again

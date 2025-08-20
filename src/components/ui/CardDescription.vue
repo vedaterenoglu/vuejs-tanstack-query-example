@@ -10,7 +10,7 @@
 <template>
   <div
     data-slot="card-description"
-    :class="cn('text-muted-foreground text-sm', $attrs.class)"
+    :class="cn('text-muted-foreground text-sm', $attrs.class as string | undefined)"
   >
     <slot />
   </div>

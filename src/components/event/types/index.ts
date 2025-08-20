@@ -93,7 +93,7 @@ export interface EventPriceProps {
 export interface EventInfoItemProps {
   icon?: string
   label: string
-  value: string
+  value: string | undefined
   className?: string
 }
 

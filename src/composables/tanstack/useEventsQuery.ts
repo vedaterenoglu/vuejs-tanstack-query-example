@@ -105,11 +105,14 @@ export function useEventsQuery(
   })
 
   const queryKey = computed(() => {
-    const filters = Object.fromEntries(
-      Object.entries(queryParams.value).filter(
-        ([, value]) => value !== undefined
-      )
-    )
+    const filters: EventsQueryParams = {
+      limit: queryParams.value.limit,
+      offset: queryParams.value.offset,
+      sortBy: queryParams.value.sortBy,
+      order: queryParams.value.order,
+      ...(queryParams.value.search && { search: queryParams.value.search }),
+      ...(queryParams.value.city && { city: queryParams.value.city }),
+    }
     return eventQueryKeys.list(filters)
   })
 
@@ -135,9 +138,16 @@ export function useEventsByCity(
     () => unref(enabled) && Boolean(unwrappedCitySlug.value)
   )
 
-  const queryKey = computed(() =>
-    eventQueryKeys.list({ search: unwrappedCitySlug.value })
-  )
+  const queryKey = computed(() => {
+    const filters: EventsQueryParams = {
+      offset: 0,
+      order: 'asc',
+      limit: 50,
+      sortBy: 'date',
+      search: unwrappedCitySlug.value,
+    }
+    return eventQueryKeys.list(filters)
+  })
 
   return useQuery({
     queryKey,
@@ -161,9 +171,16 @@ export function useEventsSearch(
     () => unref(enabled) && Boolean(unwrappedSearchQuery.value.trim())
   )
 
-  const queryKey = computed(() =>
-    eventQueryKeys.list({ search: unwrappedSearchQuery.value })
-  )
+  const queryKey = computed(() => {
+    const filters: EventsQueryParams = {
+      offset: 0,
+      order: 'asc',
+      limit: 50,
+      sortBy: 'date',
+      search: unwrappedSearchQuery.value,
+    }
+    return eventQueryKeys.list(filters)
+  })
 
   return useQuery({
     queryKey,
@@ -188,12 +205,14 @@ export function useInfiniteEventsQuery(
   const unwrappedItemsPerPage = computed(() => unref(itemsPerPage))
 
   const queryKey = computed(() => {
-    const params = Object.fromEntries(
-      Object.entries({
-        ...unwrappedBaseParams.value,
-        limit: unwrappedItemsPerPage.value,
-      }).filter(([, value]) => value !== undefined)
-    )
+    const params: EventsQueryParams = {
+      offset: 0,
+      order: unwrappedBaseParams.value.order || 'asc',
+      limit: unwrappedItemsPerPage.value,
+      sortBy: unwrappedBaseParams.value.sortBy || 'date',
+      ...(unwrappedBaseParams.value.search && { search: unwrappedBaseParams.value.search }),
+      ...(unwrappedBaseParams.value.city && { city: unwrappedBaseParams.value.city }),
+    }
     return eventQueryKeys.list(params)
   })
 

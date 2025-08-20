@@ -47,7 +47,7 @@
           {{ unitPriceLabel }}:
         </span>
         <span class="text-gray-900 dark:text-white">
-          {{ formatPrice(unitPrice) }}
+          {{ formatPrice(unitPrice || 0) }}
         </span>
       </div>
 

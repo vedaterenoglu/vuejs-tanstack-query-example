@@ -12,7 +12,6 @@ export {
   useEventsSearch,
   useInfiniteEventsQuery,
   useEventQuery,
-  useEventSuspenseQuery,
   useEventsWithMeta,
 } from './useEventsQuery'
 
@@ -29,7 +28,6 @@ export {
   useCitiesQuery,
   useCitiesSearch,
   useCityQuery,
-  useCitySuspenseQuery,
   useCitiesWithMeta,
   useCityExists,
   useCityValidation,

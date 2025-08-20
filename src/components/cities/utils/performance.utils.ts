@@ -62,7 +62,7 @@ export function debounce<TArgs extends unknown[], TReturn>(
   fn: (...args: TArgs) => TReturn,
   delay: number
 ): ((...args: TArgs) => void) & { cancel: () => void } {
-  let timeoutId: NodeJS.Timeout | null = null
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
 
   const debounced = ((...args: TArgs) => {
     if (timeoutId) {
@@ -100,7 +100,7 @@ export function throttle<TArgs extends unknown[], TReturn>(
 ): ((...args: TArgs) => void) & { cancel: () => void } {
   let inThrottle = false
   let lastArgs: TArgs | null = null
-  let timeoutId: NodeJS.Timeout | null = null
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
 
   const throttled = ((...args: TArgs) => {
     lastArgs = args

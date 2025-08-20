@@ -14,7 +14,7 @@ import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
  */
 export function authGuard(
   to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
+  _from: RouteLocationNormalized,
   next: NavigationGuardNext
 ): void {
   // Check if route requires authentication
@@ -59,7 +59,7 @@ function checkAuthentication(): boolean {
  */
 export function guestGuard(
   to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
+  _from: RouteLocationNormalized,
   next: NavigationGuardNext
 ): void {
   const isAuthenticated = checkAuthentication()
@@ -79,7 +79,7 @@ export function guestGuard(
 export function roleGuard(requiredRole: string) {
   return (
     to: RouteLocationNormalized,
-    from: RouteLocationNormalized,
+    _from: RouteLocationNormalized,
     next: NavigationGuardNext
   ): void => {
     // TODO: Implement role checking with Clerk

@@ -10,7 +10,7 @@
 <template>
   <div
     data-slot="card-title"
-    :class="cn('leading-none font-semibold', $attrs.class)"
+    :class="cn('leading-none font-semibold', $attrs.class as string | undefined)"
   >
     <slot />
   </div>

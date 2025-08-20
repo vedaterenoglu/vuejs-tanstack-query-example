@@ -34,6 +34,8 @@ export interface EventImageProps {
   alt?: string
   fallbackSrc?: string
   className?: string
+  onError?: () => void
+  onLoad?: () => void
 }
 
 export interface EventTitleProps {

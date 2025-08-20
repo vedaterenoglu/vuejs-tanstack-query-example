@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import EventHeroSection from '@/components/events/EventHeroSection.vue'
+import EventHeroSection from '@/components/event/organisms/EventHero.vue'
 import { formatEventPrice } from '@/lib/utils/events'
 
 // Austin Emerging Artists Showcase event data

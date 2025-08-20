@@ -10,7 +10,7 @@
 <template>
   <component
     :is="componentType"
-    :class="cn(buttonVariants({ variant, size }), $attrs.class)"
+    :class="cn(buttonVariants({ variant, size }), $attrs.class as string)"
     v-bind="filteredAttrs"
   >
     <slot />
